@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- The .NET client for the OhrTech Management API (api.ohrtech.net). Generated/ comes from
+         openapi.json by ../../generate.sh; everything else is written by hand. -->
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <RootNamespace>OhrTech.Management</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);CS1591;CS1573</NoWarn>
+
+        <PackageId>OhrTech.Management</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>OhrTech</Authors>
+        <Company>OhrTech</Company>
+        <Copyright>Copyright (c) 2026 OhrTech</Copyright>
+        <Description>Client for the OhrTech Management API: manage your organisation's devices from your own servers and tools. Device status, settings, fleets, tasks, remote control (with an embeddable viewer) and remote ADB. Signs in as a person (device code flow, tokens refreshed for you) or as an organisation's service account.</Description>
+        <PackageTags>ohrtech;mdm;device-management;android;remote-control</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/OhrTech/management-sdk-dotnet</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/OhrTech/management-sdk-dotnet</RepositoryUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../../README.md" Pack="true" PackagePath="/" />
+    </ItemGroup>
+
+    <!-- Only to read the ohr CLI's saved login on Windows (OhrUserSession.FromOhrCli). -->
+    <ItemGroup>
+        <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.13" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="System.Text.Json" Version="10.0.0" />
+    </ItemGroup>
+
+</Project>

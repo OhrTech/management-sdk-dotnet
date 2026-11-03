@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Generated code matches openapi.json
+        run: |
+          ./generate.sh
+          git diff --exit-code -- src/OhrTech.Management/Generated
+
+      - run: dotnet build -c Release
+      - run: dotnet pack -c Release --no-build -o artifacts
