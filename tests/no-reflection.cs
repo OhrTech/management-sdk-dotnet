@@ -14,7 +14,7 @@ var sent = new List<string>();
 using var api = OhrManagementClient.ForServiceAccount("ohrs_test", innerHandler: new Canned(sent));
 
 var devices = await api.ListDevicesAsync(online: true);
-Check(devices.Count == 1 && devices[0].Serial == "A0316A40462" && devices[0].BatteryLevel == 74, "ListDevices");
+Check(devices.Count == 1 && devices[0].Serial == "A0000A00042" && devices[0].BatteryLevel == 74, "ListDevices");
 
 var device = await api.GetDeviceAsync(6);
 Check(device.Os.Fingerprint == "fp" && device.Capabilities.YourPermissions.Contains("ViewDevices"), "GetDevice");
@@ -55,7 +55,7 @@ sealed class Canned(List<string> sent) : HttpMessageHandler
         return path switch
         {
             "/v1/devices" => Json(HttpStatusCode.OK, """
-                [{"deviceId":6,"imei":"1","serial":"A0316A40462","clientId":1,"clientName":"Acme","online":true,
+                [{"deviceId":6,"imei":"1","serial":"A0000A00042","clientId":1,"clientName":"Acme","online":true,
                   "remoteAdb":true,"typeName":"OhrTech Aleph","remoteControl":true,"batteryLevel":74,"charging":false,
                   "settingsErrors":0,"agentOutdated":false}]
                 """),
