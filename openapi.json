@@ -2351,6 +2351,98 @@
           }
         }
       }
+    },
+    "/v1/devices/{deviceId}/shell": {
+      "post": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Runs a command as adb shell would, as the shell user. It returns the task at once; the device runs it when it gets it, within seconds when online. Poll the task until it is success or failed, then read shell.",
+        "operationId": "RunShellCommand",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunShellCommandRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2504,6 +2596,7 @@
         "required": [
           "remoteAdb",
           "remoteControl",
+          "shellCommands",
           "yourPermissions"
         ],
         "type": "object",
@@ -2515,6 +2608,10 @@
           "remoteAdb": {
             "type": "boolean",
             "description": "The device supports remote ADB."
+          },
+          "shellCommands": {
+            "type": "boolean",
+            "description": "The device can run shell commands (POST /v1/devices/{deviceId}/shell)."
           },
           "yourPermissions": {
             "type": "array",
@@ -2700,6 +2797,7 @@
           "remoteAdb",
           "remoteControl",
           "settingsErrors",
+          "shellCommands",
           "typeName"
         ],
         "type": "object",
@@ -2782,6 +2880,13 @@
             "format": "int32"
           },
           "agentOutdated": {
+            "type": "boolean"
+          },
+          "securityPatch": {
+            "type": "string",
+            "nullable": true
+          },
+          "shellCommands": {
             "type": "boolean"
           }
         },
@@ -3204,7 +3309,7 @@
           },
           "securityPatch": {
             "type": "string",
-            "description": "The security patch level (YYYYMM) the device's hardware attestation stated when it last enrolled. Later OS updates do not change it; the fingerprint and build date are current.",
+            "description": "The Android security patch level the device runs (YYYY-MM-DD), as last reported. Null until the device reports it.",
             "nullable": true
           }
         },
@@ -3403,6 +3508,31 @@
         },
         "additionalProperties": false
       },
+      "RunShellCommandRequest": {
+        "required": [
+          "command"
+        ],
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "What to run, as with adb shell: sh -c runs it, so pipes, ; and && work. At most 4000 characters."
+          },
+          "timeoutSeconds": {
+            "type": "integer",
+            "description": "How long it may run, 1 to 600 seconds (default 60). Then it is stopped and the task fails.",
+            "format": "int32",
+            "nullable": true
+          },
+          "expiresAt": {
+            "type": "string",
+            "description": "Don't run it if the device gets it after this time, for example because it was offline. Default: whenever it gets it.",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ServiceAccountLimitsDto": {
         "type": "object",
         "properties": {
@@ -3561,6 +3691,51 @@
         },
         "additionalProperties": false
       },
+      "ShellResultDto": {
+        "required": [
+          "stderr",
+          "stdout",
+          "timedOut",
+          "truncated"
+        ],
+        "type": "object",
+        "properties": {
+          "exitCode": {
+            "type": "integer",
+            "description": "The command's exit status; null if it did not finish (it timed out, or could not start: see error).",
+            "format": "int32",
+            "nullable": true
+          },
+          "stdout": {
+            "type": "string",
+            "description": "Its standard output: the first 64 KiB."
+          },
+          "stderr": {
+            "type": "string",
+            "description": "Its standard error: the first 64 KiB."
+          },
+          "truncated": {
+            "type": "boolean",
+            "description": "There was more output than that."
+          },
+          "timedOut": {
+            "type": "boolean",
+            "description": "It ran out of time and was stopped."
+          },
+          "durationMs": {
+            "type": "integer",
+            "description": "How long it ran.",
+            "format": "int64",
+            "nullable": true
+          },
+          "error": {
+            "type": "string",
+            "description": "Why it did not run, when it did not.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ShowMessageRequest": {
         "required": [
           "text"
@@ -3614,6 +3789,7 @@
           },
           "result": {
             "type": "string",
+            "description": "What the device reported when it finished, as JSON (for a shell command, see shell).",
             "nullable": true
           },
           "createdAt": {
@@ -3635,6 +3811,14 @@
               "$ref": "#/components/schemas/TaskMessageDto"
             },
             "description": "What the device reported while running it, oldest first."
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Who created it through the API or the portal; null for the tasks OhrTech creates (updates).",
+            "nullable": true
+          },
+          "shell": {
+            "$ref": "#/components/schemas/ShellResultDto"
           }
         },
         "additionalProperties": false

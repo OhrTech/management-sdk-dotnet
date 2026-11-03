@@ -271,6 +271,14 @@ namespace OhrTech.Management
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<TaskDto> ShowMessageAsync(long deviceId, ShowMessageRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Runs a command as adb shell would, as the shell user. It returns the task at once; the device runs it when it gets it, within seconds when online. Poll the task until it is success or failed, then read shell.
+        /// </summary>
+        /// <returns>Created</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<TaskDto> RunShellCommandAsync(long deviceId, RunShellCommandRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -3967,6 +3975,142 @@ namespace OhrTech.Management
             }
         }
 
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Runs a command as adb shell would, as the shell user. It returns the task at once; the device runs it when it gets it, within seconds when online. Poll the task until it is success or failed, then read shell.
+        /// </summary>
+        /// <returns>Created</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<TaskDto> RunShellCommandAsync(long deviceId, RunShellCommandRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (deviceId == null)
+                throw new System.ArgumentNullException("deviceId");
+
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = SerializeBody(body);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/devices/{deviceId}/shell"
+                    urlBuilder_.Append("v1/devices/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(deviceId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/shell");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<TaskDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
         protected struct ObjectResponseResult<T>
         {
             public ObjectResponseResult(T responseObject, string responseText)
@@ -4215,6 +4359,12 @@ namespace OhrTech.Management
         public bool RemoteAdb { get; set; } = default!;
 
         /// <summary>
+        /// The device can run shell commands (POST /v1/devices/{deviceId}/shell).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("shellCommands")]
+        public bool ShellCommands { get; set; } = default!;
+
+        /// <summary>
         /// What the caller may do to this device.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("yourPermissions")]
@@ -4405,6 +4555,12 @@ namespace OhrTech.Management
 
         [System.Text.Json.Serialization.JsonPropertyName("agentOutdated")]
         public bool AgentOutdated { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("securityPatch")]
+        public string? SecurityPatch { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("shellCommands")]
+        public bool ShellCommands { get; set; } = default!;
 
     }
 
@@ -4735,7 +4891,7 @@ namespace OhrTech.Management
         public string? BuildDate { get; set; } = default!;
 
         /// <summary>
-        /// The security patch level (YYYYMM) the device's hardware attestation stated when it last enrolled. Later OS updates do not change it; the fingerprint and build date are current.
+        /// The Android security patch level the device runs (YYYY-MM-DD), as last reported. Null until the device reports it.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("securityPatch")]
         public string? SecurityPatch { get; set; } = default!;
@@ -4896,6 +5052,30 @@ namespace OhrTech.Management
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RunShellCommandRequest
+    {
+
+        /// <summary>
+        /// What to run, as with adb shell: sh -c runs it, so pipes, ; and &amp;&amp; work. At most 4000 characters.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("command")]
+        public string Command { get; set; } = default!;
+
+        /// <summary>
+        /// How long it may run, 1 to 600 seconds (default 60). Then it is stopped and the task fails.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("timeoutSeconds")]
+        public int? TimeoutSeconds { get; set; } = default!;
+
+        /// <summary>
+        /// Don't run it if the device gets it after this time, for example because it was offline. Default: whenever it gets it.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("expiresAt")]
+        public System.DateTimeOffset? ExpiresAt { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ServiceAccountLimitsDto
     {
 
@@ -5033,6 +5213,54 @@ namespace OhrTech.Management
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ShellResultDto
+    {
+
+        /// <summary>
+        /// The command's exit status; null if it did not finish (it timed out, or could not start: see error).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("exitCode")]
+        public int? ExitCode { get; set; } = default!;
+
+        /// <summary>
+        /// Its standard output: the first 64 KiB.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("stdout")]
+        public string Stdout { get; set; } = default!;
+
+        /// <summary>
+        /// Its standard error: the first 64 KiB.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("stderr")]
+        public string Stderr { get; set; } = default!;
+
+        /// <summary>
+        /// There was more output than that.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("truncated")]
+        public bool Truncated { get; set; } = default!;
+
+        /// <summary>
+        /// It ran out of time and was stopped.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("timedOut")]
+        public bool TimedOut { get; set; } = default!;
+
+        /// <summary>
+        /// How long it ran.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("durationMs")]
+        public long? DurationMs { get; set; } = default!;
+
+        /// <summary>
+        /// Why it did not run, when it did not.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("error")]
+        public string? Error { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ShowMessageRequest
     {
 
@@ -5066,6 +5294,9 @@ namespace OhrTech.Management
         [System.Text.Json.Serialization.JsonPropertyName("priority")]
         public int Priority { get; set; } = default!;
 
+        /// <summary>
+        /// What the device reported when it finished, as JSON (for a shell command, see shell).
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("result")]
         public string? Result { get; set; } = default!;
 
@@ -5083,6 +5314,15 @@ namespace OhrTech.Management
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("messages")]
         public System.Collections.Generic.List<TaskMessageDto> Messages { get; set; } = new System.Collections.Generic.List<TaskMessageDto>();
+
+        /// <summary>
+        /// Who created it through the API or the portal; null for the tasks OhrTech creates (updates).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("createdBy")]
+        public string? CreatedBy { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("shell")]
+        public ShellResultDto? Shell { get; set; } = default!;
 
     }
 
