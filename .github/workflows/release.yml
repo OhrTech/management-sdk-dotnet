@@ -19,8 +19,8 @@ jobs:
       contents: write   # the GitHub release
       id-token: write   # the OIDC token nuget.org trades for a short-lived API key
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
