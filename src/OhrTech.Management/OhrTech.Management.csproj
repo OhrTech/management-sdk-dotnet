@@ -9,9 +9,11 @@
         <RootNamespace>OhrTech.Management</RootNamespace>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);CS1591;CS1573</NoWarn>
+        <!-- No reflection-based serialization (Json.cs): the analyzers keep it that way. -->
+        <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
 
         <PackageId>OhrTech.Management</PackageId>
-        <Version>1.0.0</Version>
+        <Version>1.0.1</Version>
         <Authors>OhrTech</Authors>
         <Company>OhrTech</Company>
         <Copyright>Copyright (c) 2026 OhrTech</Copyright>

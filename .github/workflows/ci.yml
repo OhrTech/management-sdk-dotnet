@@ -23,4 +23,6 @@ jobs:
           git diff --exit-code -- src/OhrTech.Management/Generated
 
       - run: dotnet build -c Release
+      - name: Works with reflection-based JSON off
+        run: dotnet run --no-cache tests/no-reflection.cs
       - run: dotnet pack -c Release --no-build -o artifacts

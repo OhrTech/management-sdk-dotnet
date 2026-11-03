@@ -8,7 +8,8 @@ messages and tasks, remote control (with a viewer you can embed in your web app)
 dotnet add package OhrTech.Management
 ```
 
-`netstandard2.0` and `net10.0`. This is the **Management** SDK, for servers and desktop tools. Apps
+`netstandard2.0` and `net10.0`, with no reflection-based serialization, so it also works in .NET 10
+file-based apps (`dotnet run script.cs`), trimmed and native AOT apps. This is the **Management** SDK, for servers and desktop tools. Apps
 running *on* a managed device will use the Device SDK (`device-sdk-*`, coming later) to talk to the
 OhrTech Agent instead.
 
@@ -92,6 +93,9 @@ repo-local tool); don't edit it by hand. To pick up a new API version:
 ./generate.sh https://raw.githubusercontent.com/OhrTech/management-api/main/openapi.json
 dotnet build -c Release
 ```
+
+`tests/no-reflection.cs` checks the client with reflection-based JSON off:
+`dotnet run --no-cache tests/no-reflection.cs`.
 
 Releases: push a `v*` tag (such as `v1.0.1`) and GitHub Actions packs it with that version and
 publishes it to nuget.org.
