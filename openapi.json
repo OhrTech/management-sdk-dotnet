@@ -3158,9 +3158,6 @@
         "additionalProperties": false
       },
       "OpenRemoteControlRequest": {
-        "required": [
-          "takeOver"
-        ],
         "type": "object",
         "properties": {
           "consent": {
@@ -3170,7 +3167,8 @@
           },
           "takeOver": {
             "type": "boolean",
-            "description": "End another open session on this device first."
+            "description": "End another open session on this device first (default false).",
+            "nullable": true
           },
           "embedOrigins": {
             "type": "array",
@@ -3188,6 +3186,7 @@
         "properties": {
           "fingerprint": {
             "type": "string",
+            "description": "The Foundation OS build fingerprint, as last reported.",
             "nullable": true
           },
           "vendorFingerprint": {
@@ -3200,10 +3199,12 @@
           },
           "buildDate": {
             "type": "string",
+            "description": "When that build was made, as last reported.",
             "nullable": true
           },
           "securityPatch": {
             "type": "string",
+            "description": "The security patch level (YYYYMM) the device's hardware attestation stated when it last enrolled. Later OS updates do not change it; the fingerprint and build date are current.",
             "nullable": true
           }
         },

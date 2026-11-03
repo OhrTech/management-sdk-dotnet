@@ -4699,10 +4699,10 @@ namespace OhrTech.Management
         public string? Consent { get; set; } = default!;
 
         /// <summary>
-        /// End another open session on this device first.
+        /// End another open session on this device first (default false).
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("takeOver")]
-        public bool TakeOver { get; set; } = default!;
+        public bool? TakeOver { get; set; } = default!;
 
         /// <summary>
         /// Web origins (https://app.example.com) that may show the viewer page in an iframe. At most 5. A service account limited to some sites may name only those; naming none then means all of them.
@@ -4716,6 +4716,9 @@ namespace OhrTech.Management
     public partial class OsDto
     {
 
+        /// <summary>
+        /// The Foundation OS build fingerprint, as last reported.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("fingerprint")]
         public string? Fingerprint { get; set; } = default!;
 
@@ -4725,9 +4728,15 @@ namespace OhrTech.Management
         [System.Text.Json.Serialization.JsonPropertyName("buildId")]
         public string? BuildId { get; set; } = default!;
 
+        /// <summary>
+        /// When that build was made, as last reported.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("buildDate")]
         public string? BuildDate { get; set; } = default!;
 
+        /// <summary>
+        /// The security patch level (YYYYMM) the device's hardware attestation stated when it last enrolled. Later OS updates do not change it; the fingerprint and build date are current.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("securityPatch")]
         public string? SecurityPatch { get; set; } = default!;
 

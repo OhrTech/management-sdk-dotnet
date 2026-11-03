@@ -1,6 +1,6 @@
 # OhrTech.Management
 
-The .NET client for the [OhrTech Management API](https://github.com/OhrTech/management-api): manage
+The .NET client for the [OhrTech Management API](https://docs.ohrtech.net/management-api/): manage
 your organisation's devices from your own servers and tools. Device status and settings, fleets,
 messages and tasks, remote control (with a viewer you can embed in your web app) and remote ADB.
 
@@ -82,7 +82,7 @@ var rc = await api.OpenRemoteControlSessionAsync(42, new OpenRemoteControlReques
 
 The viewer reports its state to your page with `postMessage` and takes `key`, `text`, `refresh`,
 `focus` and `end` commands back: see
-[embedding.md](https://github.com/OhrTech/management-api/blob/main/embedding.md).
+[Embed remote control](https://docs.ohrtech.net/management-api/guides/embed-remote-control/).
 
 ## Developing
 
