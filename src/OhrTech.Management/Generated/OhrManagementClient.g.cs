@@ -32,6 +32,171 @@ namespace OhrTech.Management
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
+        /// Your organisations' apps, and OhrTech's catalog and platform apps
+        /// </summary>
+        /// <param name="orgId">Only this organisation's own apps.</param>
+        /// <param name="package">Only apps with this package name (several apps may share one).</param>
+        /// <param name="kind">Only apps of this kind: org, catalog or platform.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.List<ManagedAppDto>> ListAppsAsync(string? orgId = null, string? package = null, string? kind = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add an app: a package name and your name for it (several apps may share a package)
+        /// </summary>
+        /// <returns>Created</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ManagedAppDto> CreateAppAsync(CreateAppRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// One app, with its newest versions and fleets
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ManagedAppDto> GetAppAsync(string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Rename an app
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ManagedAppDto> UpdateAppAsync(string appId, UpdateAppRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// An app's versions, newest first
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.List<AppVersionDto>> ListAppVersionsAsync(string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// The request body is the APK. It must be this app's package; its version code must be newer than every version already uploaded, and it must be signed with the same key (unless allowNewSigningKey). A 409 also carries appId, packageName and versionCode, plus latestVersionCode and exists (that version code is already uploaded) or the two keys' signingKeySha256 and expectedSigningKeySha256, so a pipeline that runs again can tell its own earlier upload from a mistake.
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <param name="body">The APK file.</param>
+        /// <param name="state">held (the default), available or enforced.</param>
+        /// <param name="allowNewSigningKey">Accept an APK signed with a different key than the previous version.
+        /// <br/>            Devices refuse such an update unless the new key is a rotation (APK signature scheme v3) of the old one.</param>
+        /// <returns>Created</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<AppVersionDto> UploadApkAsync(string appId, System.IO.Stream body, string? state = null, bool? allowNewSigningKey = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Hold, offer or enforce a version (and, for OhrTech's apps, its notes)
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<AppVersionDto> SetAppVersionStateAsync(string appId, long versionCode, SetAppVersionStateRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Which devices run the enforced version, and which are still getting it
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<RolloutDto> GetAppRolloutAsync(string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// The apps a fleet's devices get
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.List<ManagedAppDto>> ListFleetAppsAsync(string fleetId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Give an app to a fleet's devices
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task AddFleetAppAsync(string fleetId, string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Stop giving an app to a fleet's devices: they uninstall it
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task RemoveFleetAppAsync(string fleetId, string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Whether a fleet gets an OhrTech app's updates automatically or only once approved
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<AppPolicyDto> GetFleetAppPolicyAsync(string fleetId, string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Manual keeps the fleet's devices on the approved version for as long as the organisation wants:
+        /// <br/>switching to manual without a version approves what the fleet gets now. Approving a version moves
+        /// <br/>the devices to it at the fleet's update timing; devices never go back to an older one.
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<AppPolicyDto> SetFleetAppPolicyAsync(string fleetId, string appId, SetAppPolicyRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Let a fleet follow its parent's policy for an OhrTech app again
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<AppPolicyDto> ClearFleetAppPolicyAsync(string fleetId, string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// When a fleet's devices install app updates
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UpdateTimingDto> GetUpdateTimingAsync(string fleetId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Set when a fleet's devices install app updates: screen off, a maintenance window, or immediately
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UpdateTimingDto> SetUpdateTimingAsync(string fleetId, UpdateTimingRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Let a fleet follow its parent's update timing again
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UpdateTimingDto> ClearUpdateTimingAsync(string fleetId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
         /// Who the caller is, and their organisations and permissions
         /// </summary>
         /// <returns>OK</returns>
@@ -42,136 +207,150 @@ namespace OhrTech.Management
         /// <summary>
         /// The devices of the caller's organisations
         /// </summary>
-        /// <param name="clientId">Only this organisation's devices.</param>
+        /// <param name="orgId">Only this organisation's devices.</param>
         /// <param name="fleetId">Only devices directly in this fleet.</param>
         /// <param name="online">Only devices that are (true) or are not (false) online.</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<DeviceDto>> ListDevicesAsync(long? clientId = null, long? fleetId = null, bool? online = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<DeviceDto>> ListDevicesAsync(string? orgId = null, string? fleetId = null, bool? online = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// One device: identity, status, settings sync, capabilities
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DeviceDetailDto> GetDeviceAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<DeviceDetailDto> GetDeviceAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Moves the device to another fleet of its organisation (null: out of every fleet), then sends it its new policy.
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>No Content</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task MoveDeviceAsync(long deviceId, MoveDeviceRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task MoveDeviceAsync(string deviceId, MoveDeviceRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Every enrolment of the device, newest first
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<EnrolmentDto>> ListEnrolmentsAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<EnrolmentDto>> ListEnrolmentsAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// The apps installed on the device, as it last reported them
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<AppDto>> ListInstalledAppsAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<AppDto>> ListInstalledAppsAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Sends the device a ping; it answers with a check-in (fresh status) within seconds when it is
         /// <br/>reachable. A device on mobile data may only hear it at its next scheduled check-in.
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Accepted</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CheckInDto> RequestCheckInAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<CheckInDto> RequestCheckInAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// The fleets of the caller's organisations
         /// </summary>
-        /// <param name="clientId">Only this organisation's fleets.</param>
+        /// <param name="orgId">Only this organisation's fleets.</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<FleetDto>> ListFleetsAsync(long? clientId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<FleetDto>> ListFleetsAsync(string? orgId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// The device's remote ADB sessions, newest first
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <param name="limit">At most this many (1-100, default 20).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<AdbSessionDto>> ListAdbSessionsAsync(long deviceId, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<AdbSessionDto>> ListAdbSessionsAsync(string deviceId, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Open a remote ADB session (the ohr CLI does this, and runs the end-to-end tunnel)
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<OpenAdbSessionResponse> OpenAdbSessionAsync(long deviceId, OpenAdbSessionRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<OpenAdbSessionResponse> OpenAdbSessionAsync(string deviceId, OpenAdbSessionRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// One remote ADB session
         /// </summary>
+        /// <param name="sessionId">A remote ADB session id (adb_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AdbSessionDto> GetAdbSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<AdbSessionDto> GetAdbSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Close a remote ADB session
         /// </summary>
+        /// <param name="sessionId">A remote ADB session id (adb_…).</param>
         /// <returns>No Content</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task CloseAdbSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task CloseAdbSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// The device's remote control sessions, newest first
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <param name="limit">At most this many (1-100, default 20).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<RemoteControlSessionDto>> ListRemoteControlSessionsAsync(long deviceId, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<RemoteControlSessionDto>> ListRemoteControlSessionsAsync(string deviceId, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Start seeing and controlling the device's screen
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RemoteControlDto> OpenRemoteControlSessionAsync(long deviceId, OpenRemoteControlRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<RemoteControlDto> OpenRemoteControlSessionAsync(string deviceId, OpenRemoteControlRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// One remote control session
         /// </summary>
+        /// <param name="sessionId">A remote control session id (rc_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RemoteControlSessionDto> GetRemoteControlSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<RemoteControlSessionDto> GetRemoteControlSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Ends the session: your own, or anyone's on a device you may control (the same permission lets you take it over).
         /// </summary>
+        /// <param name="sessionId">A remote control session id (rc_…).</param>
         /// <returns>No Content</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task CloseRemoteControlSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task CloseRemoteControlSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// A fresh viewer token and embed link for your own open session
         /// </summary>
+        /// <param name="sessionId">A remote control session id (rc_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RemoteControlDto> JoinRemoteControlSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<RemoteControlDto> JoinRemoteControlSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -185,33 +364,37 @@ namespace OhrTech.Management
         /// <summary>
         /// The device's own overrides, what it inherits, what it must follow, and what it reported
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DeviceSettingsDto> GetDeviceSettingsAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<DeviceSettingsDto> GetDeviceSettingsAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Replace the device's own overrides, then send the device its policy
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DeviceSettingsDto> ReplaceDeviceSettingsAsync(long deviceId, PolicyDto body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<DeviceSettingsDto> ReplaceDeviceSettingsAsync(string deviceId, PolicyDto body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Change some of the device's own overrides (null removes one), then send the device its policy
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DeviceSettingsDto> UpdateDeviceSettingsAsync(long deviceId, PolicyPatchDto body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<DeviceSettingsDto> UpdateDeviceSettingsAsync(string deviceId, PolicyPatchDto body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Send the device its policy now, optionally re-applying Set settings
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Accepted</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PushDeviceSettingsAsync(long deviceId, PushSettingsRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task PushDeviceSettingsAsync(string deviceId, PushSettingsRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -241,43 +424,49 @@ namespace OhrTech.Management
         /// <summary>
         /// The device's tasks, newest first
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <param name="limit">At most this many (1-200, default 50).</param>
-        /// <param name="before">Only tasks with a smaller id: pass the last taskId of the previous page.</param>
+        /// <param name="before">Only tasks older than this one: pass the last taskId of the previous page.</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<TaskDto>> ListTasksAsync(long deviceId, int? limit = null, long? before = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<TaskDto>> ListTasksAsync(string deviceId, int? limit = null, string? before = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Create a task and send it to the device
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TaskDto> CreateTaskAsync(long deviceId, CreateTaskRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<TaskDto> CreateTaskAsync(string deviceId, CreateTaskRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// One task, with what the device reported
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
+        /// <param name="taskId">A task id (tsk_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TaskDto> GetTaskAsync(long deviceId, long taskId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<TaskDto> GetTaskAsync(string deviceId, string taskId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Show a message on the device's screen (a ShowToast task)
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TaskDto> ShowMessageAsync(long deviceId, ShowMessageRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<TaskDto> ShowMessageAsync(string deviceId, ShowMessageRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Runs a command as adb shell would, as the shell user. It returns the task at once; the device runs it when it gets it, within seconds when online. Poll the task until it is success or failed, then read shell.
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TaskDto> RunShellCommandAsync(long deviceId, RunShellCommandRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<TaskDto> RunShellCommandAsync(string deviceId, RunShellCommandRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -312,6 +501,2297 @@ namespace OhrTech.Management
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Your organisations' apps, and OhrTech's catalog and platform apps
+        /// </summary>
+        /// <param name="orgId">Only this organisation's own apps.</param>
+        /// <param name="package">Only apps with this package name (several apps may share one).</param>
+        /// <param name="kind">Only apps of this kind: org, catalog or platform.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<ManagedAppDto>> ListAppsAsync(string? orgId = null, string? package = null, string? kind = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/apps"
+                    urlBuilder_.Append("v1/apps");
+                    urlBuilder_.Append('?');
+                    if (orgId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("orgId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(orgId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (package != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("package")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(package, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (kind != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("kind")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(kind, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.List<ManagedAppDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add an app: a package name and your name for it (several apps may share a package)
+        /// </summary>
+        /// <returns>Created</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ManagedAppDto> CreateAppAsync(CreateAppRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = SerializeBody(body);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/apps"
+                    urlBuilder_.Append("v1/apps");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ManagedAppDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// One app, with its newest versions and fleets
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ManagedAppDto> GetAppAsync(string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/apps/{appId}"
+                    urlBuilder_.Append("v1/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ManagedAppDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Rename an app
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ManagedAppDto> UpdateAppAsync(string appId, UpdateAppRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = SerializeBody(body);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PATCH");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/apps/{appId}"
+                    urlBuilder_.Append("v1/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ManagedAppDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// An app's versions, newest first
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<AppVersionDto>> ListAppVersionsAsync(string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/apps/{appId}/versions"
+                    urlBuilder_.Append("v1/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/versions");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.List<AppVersionDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// The request body is the APK. It must be this app's package; its version code must be newer than every version already uploaded, and it must be signed with the same key (unless allowNewSigningKey). A 409 also carries appId, packageName and versionCode, plus latestVersionCode and exists (that version code is already uploaded) or the two keys' signingKeySha256 and expectedSigningKeySha256, so a pipeline that runs again can tell its own earlier upload from a mistake.
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <param name="body">The APK file.</param>
+        /// <param name="state">held (the default), available or enforced.</param>
+        /// <param name="allowNewSigningKey">Accept an APK signed with a different key than the previous version.
+        /// <br/>            Devices refuse such an update unless the new key is a rotation (APK signature scheme v3) of the old one.</param>
+        /// <returns>Created</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<AppVersionDto> UploadApkAsync(string appId, System.IO.Stream body, string? state = null, bool? allowNewSigningKey = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var content_ = new System.Net.Http.StreamContent(body);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/octet-stream");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/apps/{appId}/versions"
+                    urlBuilder_.Append("v1/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/versions");
+                    urlBuilder_.Append('?');
+                    if (state != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("state")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(state, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (allowNewSigningKey != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("allowNewSigningKey")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(allowNewSigningKey, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AppVersionDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Hold, offer or enforce a version (and, for OhrTech's apps, its notes)
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<AppVersionDto> SetAppVersionStateAsync(string appId, long versionCode, SetAppVersionStateRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            if (versionCode == null)
+                throw new System.ArgumentNullException("versionCode");
+
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = SerializeBody(body);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PATCH");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/apps/{appId}/versions/{versionCode}"
+                    urlBuilder_.Append("v1/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/versions/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(versionCode, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AppVersionDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Which devices run the enforced version, and which are still getting it
+        /// </summary>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<RolloutDto> GetAppRolloutAsync(string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/apps/{appId}/rollout"
+                    urlBuilder_.Append("v1/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/rollout");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<RolloutDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// The apps a fleet's devices get
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<ManagedAppDto>> ListFleetAppsAsync(string fleetId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (fleetId == null)
+                throw new System.ArgumentNullException("fleetId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/fleets/{fleetId}/apps"
+                    urlBuilder_.Append("v1/fleets/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(fleetId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/apps");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.List<ManagedAppDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Give an app to a fleet's devices
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task AddFleetAppAsync(string fleetId, string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (fleetId == null)
+                throw new System.ArgumentNullException("fleetId");
+
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/fleets/{fleetId}/apps/{appId}"
+                    urlBuilder_.Append("v1/fleets/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(fleetId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Stop giving an app to a fleet's devices: they uninstall it
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task RemoveFleetAppAsync(string fleetId, string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (fleetId == null)
+                throw new System.ArgumentNullException("fleetId");
+
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/fleets/{fleetId}/apps/{appId}"
+                    urlBuilder_.Append("v1/fleets/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(fleetId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Whether a fleet gets an OhrTech app's updates automatically or only once approved
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<AppPolicyDto> GetFleetAppPolicyAsync(string fleetId, string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (fleetId == null)
+                throw new System.ArgumentNullException("fleetId");
+
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/fleets/{fleetId}/apps/{appId}/policy"
+                    urlBuilder_.Append("v1/fleets/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(fleetId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/policy");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AppPolicyDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Manual keeps the fleet's devices on the approved version for as long as the organisation wants:
+        /// <br/>switching to manual without a version approves what the fleet gets now. Approving a version moves
+        /// <br/>the devices to it at the fleet's update timing; devices never go back to an older one.
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<AppPolicyDto> SetFleetAppPolicyAsync(string fleetId, string appId, SetAppPolicyRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (fleetId == null)
+                throw new System.ArgumentNullException("fleetId");
+
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = SerializeBody(body);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/fleets/{fleetId}/apps/{appId}/policy"
+                    urlBuilder_.Append("v1/fleets/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(fleetId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/policy");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AppPolicyDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Let a fleet follow its parent's policy for an OhrTech app again
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <param name="appId">An app id (app_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<AppPolicyDto> ClearFleetAppPolicyAsync(string fleetId, string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (fleetId == null)
+                throw new System.ArgumentNullException("fleetId");
+
+            if (appId == null)
+                throw new System.ArgumentNullException("appId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/fleets/{fleetId}/apps/{appId}/policy"
+                    urlBuilder_.Append("v1/fleets/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(fleetId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/apps/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(appId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/policy");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AppPolicyDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// When a fleet's devices install app updates
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<UpdateTimingDto> GetUpdateTimingAsync(string fleetId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (fleetId == null)
+                throw new System.ArgumentNullException("fleetId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/fleets/{fleetId}/update-timing"
+                    urlBuilder_.Append("v1/fleets/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(fleetId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/update-timing");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<UpdateTimingDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Set when a fleet's devices install app updates: screen off, a maintenance window, or immediately
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<UpdateTimingDto> SetUpdateTimingAsync(string fleetId, UpdateTimingRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (fleetId == null)
+                throw new System.ArgumentNullException("fleetId");
+
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = SerializeBody(body);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/fleets/{fleetId}/update-timing"
+                    urlBuilder_.Append("v1/fleets/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(fleetId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/update-timing");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<UpdateTimingDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Let a fleet follow its parent's update timing again
+        /// </summary>
+        /// <param name="fleetId">A fleet id (flt_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<UpdateTimingDto> ClearUpdateTimingAsync(string fleetId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (fleetId == null)
+                throw new System.ArgumentNullException("fleetId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/fleets/{fleetId}/update-timing"
+                    urlBuilder_.Append("v1/fleets/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(fleetId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/update-timing");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<UpdateTimingDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -441,12 +2921,12 @@ namespace OhrTech.Management
         /// <summary>
         /// The devices of the caller's organisations
         /// </summary>
-        /// <param name="clientId">Only this organisation's devices.</param>
+        /// <param name="orgId">Only this organisation's devices.</param>
         /// <param name="fleetId">Only devices directly in this fleet.</param>
         /// <param name="online">Only devices that are (true) or are not (false) online.</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<DeviceDto>> ListDevicesAsync(long? clientId = null, long? fleetId = null, bool? online = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<DeviceDto>> ListDevicesAsync(string? orgId = null, string? fleetId = null, bool? online = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -462,9 +2942,9 @@ namespace OhrTech.Management
                     // Operation Path: "v1/devices"
                     urlBuilder_.Append("v1/devices");
                     urlBuilder_.Append('?');
-                    if (clientId != null)
+                    if (orgId != null)
                     {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("clientId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(clientId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                        urlBuilder_.Append(System.Uri.EscapeDataString("orgId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(orgId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     if (fleetId != null)
                     {
@@ -582,9 +3062,10 @@ namespace OhrTech.Management
         /// <summary>
         /// One device: identity, status, settings sync, capabilities
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DeviceDetailDto> GetDeviceAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DeviceDetailDto> GetDeviceAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -710,9 +3191,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Moves the device to another fleet of its organisation (null: out of every fleet), then sends it its new policy.
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>No Content</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task MoveDeviceAsync(long deviceId, MoveDeviceRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task MoveDeviceAsync(string deviceId, MoveDeviceRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -840,9 +3322,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Every enrolment of the device, newest first
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<EnrolmentDto>> ListEnrolmentsAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<EnrolmentDto>> ListEnrolmentsAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -969,9 +3452,10 @@ namespace OhrTech.Management
         /// <summary>
         /// The apps installed on the device, as it last reported them
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<AppDto>> ListInstalledAppsAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<AppDto>> ListInstalledAppsAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -1099,9 +3583,10 @@ namespace OhrTech.Management
         /// Sends the device a ping; it answers with a check-in (fresh status) within seconds when it is
         /// <br/>reachable. A device on mobile data may only hear it at its next scheduled check-in.
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Accepted</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CheckInDto> RequestCheckInAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<CheckInDto> RequestCheckInAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -1229,10 +3714,10 @@ namespace OhrTech.Management
         /// <summary>
         /// The fleets of the caller's organisations
         /// </summary>
-        /// <param name="clientId">Only this organisation's fleets.</param>
+        /// <param name="orgId">Only this organisation's fleets.</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<FleetDto>> ListFleetsAsync(long? clientId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<FleetDto>> ListFleetsAsync(string? orgId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1248,9 +3733,9 @@ namespace OhrTech.Management
                     // Operation Path: "v1/fleets"
                     urlBuilder_.Append("v1/fleets");
                     urlBuilder_.Append('?');
-                    if (clientId != null)
+                    if (orgId != null)
                     {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("clientId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(clientId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                        urlBuilder_.Append(System.Uri.EscapeDataString("orgId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(orgId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     urlBuilder_.Length--;
 
@@ -1360,10 +3845,11 @@ namespace OhrTech.Management
         /// <summary>
         /// The device's remote ADB sessions, newest first
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <param name="limit">At most this many (1-100, default 20).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<AdbSessionDto>> ListAdbSessionsAsync(long deviceId, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<AdbSessionDto>> ListAdbSessionsAsync(string deviceId, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -1496,9 +3982,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Open a remote ADB session (the ohr CLI does this, and runs the end-to-end tunnel)
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<OpenAdbSessionResponse> OpenAdbSessionAsync(long deviceId, OpenAdbSessionRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<OpenAdbSessionResponse> OpenAdbSessionAsync(string deviceId, OpenAdbSessionRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -1632,9 +4119,10 @@ namespace OhrTech.Management
         /// <summary>
         /// One remote ADB session
         /// </summary>
+        /// <param name="sessionId">A remote ADB session id (adb_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AdbSessionDto> GetAdbSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<AdbSessionDto> GetAdbSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (sessionId == null)
                 throw new System.ArgumentNullException("sessionId");
@@ -1760,9 +4248,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Close a remote ADB session
         /// </summary>
+        /// <param name="sessionId">A remote ADB session id (adb_…).</param>
         /// <returns>No Content</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CloseAdbSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task CloseAdbSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (sessionId == null)
                 throw new System.ArgumentNullException("sessionId");
@@ -1882,10 +4371,11 @@ namespace OhrTech.Management
         /// <summary>
         /// The device's remote control sessions, newest first
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <param name="limit">At most this many (1-100, default 20).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<RemoteControlSessionDto>> ListRemoteControlSessionsAsync(long deviceId, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<RemoteControlSessionDto>> ListRemoteControlSessionsAsync(string deviceId, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -2018,9 +4508,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Start seeing and controlling the device's screen
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<RemoteControlDto> OpenRemoteControlSessionAsync(long deviceId, OpenRemoteControlRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<RemoteControlDto> OpenRemoteControlSessionAsync(string deviceId, OpenRemoteControlRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -2151,9 +4642,10 @@ namespace OhrTech.Management
         /// <summary>
         /// One remote control session
         /// </summary>
+        /// <param name="sessionId">A remote control session id (rc_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<RemoteControlSessionDto> GetRemoteControlSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<RemoteControlSessionDto> GetRemoteControlSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (sessionId == null)
                 throw new System.ArgumentNullException("sessionId");
@@ -2279,9 +4771,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Ends the session: your own, or anyone's on a device you may control (the same permission lets you take it over).
         /// </summary>
+        /// <param name="sessionId">A remote control session id (rc_…).</param>
         /// <returns>No Content</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CloseRemoteControlSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task CloseRemoteControlSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (sessionId == null)
                 throw new System.ArgumentNullException("sessionId");
@@ -2401,9 +4894,10 @@ namespace OhrTech.Management
         /// <summary>
         /// A fresh viewer token and embed link for your own open session
         /// </summary>
+        /// <param name="sessionId">A remote control session id (rc_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<RemoteControlDto> JoinRemoteControlSessionAsync(System.Guid sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<RemoteControlDto> JoinRemoteControlSessionAsync(string sessionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (sessionId == null)
                 throw new System.ArgumentNullException("sessionId");
@@ -2655,9 +5149,10 @@ namespace OhrTech.Management
         /// <summary>
         /// The device's own overrides, what it inherits, what it must follow, and what it reported
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DeviceSettingsDto> GetDeviceSettingsAsync(long deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DeviceSettingsDto> GetDeviceSettingsAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -2784,9 +5279,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Replace the device's own overrides, then send the device its policy
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DeviceSettingsDto> ReplaceDeviceSettingsAsync(long deviceId, PolicyDto body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DeviceSettingsDto> ReplaceDeviceSettingsAsync(string deviceId, PolicyDto body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -2920,9 +5416,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Change some of the device's own overrides (null removes one), then send the device its policy
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DeviceSettingsDto> UpdateDeviceSettingsAsync(long deviceId, PolicyPatchDto body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DeviceSettingsDto> UpdateDeviceSettingsAsync(string deviceId, PolicyPatchDto body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -3056,9 +5553,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Send the device its policy now, optionally re-applying Set settings
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Accepted</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PushDeviceSettingsAsync(long deviceId, PushSettingsRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task PushDeviceSettingsAsync(string deviceId, PushSettingsRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -3433,11 +5931,12 @@ namespace OhrTech.Management
         /// <summary>
         /// The device's tasks, newest first
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <param name="limit">At most this many (1-200, default 50).</param>
-        /// <param name="before">Only tasks with a smaller id: pass the last taskId of the previous page.</param>
+        /// <param name="before">Only tasks older than this one: pass the last taskId of the previous page.</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<TaskDto>> ListTasksAsync(long deviceId, int? limit = null, long? before = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<TaskDto>> ListTasksAsync(string deviceId, int? limit = null, string? before = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -3574,9 +6073,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Create a task and send it to the device
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TaskDto> CreateTaskAsync(long deviceId, CreateTaskRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<TaskDto> CreateTaskAsync(string deviceId, CreateTaskRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -3710,9 +6210,11 @@ namespace OhrTech.Management
         /// <summary>
         /// One task, with what the device reported
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
+        /// <param name="taskId">A task id (tsk_…).</param>
         /// <returns>OK</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TaskDto> GetTaskAsync(long deviceId, long taskId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<TaskDto> GetTaskAsync(string deviceId, string taskId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -3843,9 +6345,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Show a message on the device's screen (a ShowToast task)
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TaskDto> ShowMessageAsync(long deviceId, ShowMessageRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<TaskDto> ShowMessageAsync(string deviceId, ShowMessageRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -3979,9 +6482,10 @@ namespace OhrTech.Management
         /// <summary>
         /// Runs a command as adb shell would, as the shell user. It returns the task at once; the device runs it when it gets it, within seconds when online. Poll the task until it is success or failed, then read shell.
         /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
         /// <returns>Created</returns>
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TaskDto> RunShellCommandAsync(long deviceId, RunShellCommandRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<TaskDto> RunShellCommandAsync(string deviceId, RunShellCommandRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deviceId == null)
                 throw new System.ArgumentNullException("deviceId");
@@ -4266,10 +6770,10 @@ namespace OhrTech.Management
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("sessionId")]
-        public System.Guid SessionId { get; set; } = default!;
+        public string SessionId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("deviceId")]
-        public long DeviceId { get; set; } = default!;
+        public string DeviceId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("status")]
         public string Status { get; set; } = default!;
@@ -4324,6 +6828,139 @@ namespace OhrTech.Management
 
         [System.Text.Json.Serialization.JsonPropertyName("versionCode")]
         public long? VersionCode { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class AppFleetDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("fleetId")]
+        public string FleetId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("fleetName")]
+        public string FleetName { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class AppPolicyDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("appId")]
+        public string AppId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("fleetId")]
+        public string FleetId { get; set; } = default!;
+
+        /// <summary>
+        /// automatic: each version OhrTech enforces. manual: only the version approved here; nothing newer
+        /// <br/>            until someone in the organisation approves it. OhrTech can't override a manual fleet.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("mode")]
+        public string Mode { get; set; } = default!;
+
+        /// <summary>
+        /// For manual: the version the fleet's devices may run (null: none newer than what
+        /// <br/>            each device has). Devices never go back to an older version.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("approvedVersionCode")]
+        public long? ApprovedVersionCode { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("approvedBy")]
+        public string? ApprovedBy { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("approvedAt")]
+        public System.DateTimeOffset? ApprovedAt { get; set; } = default!;
+
+        /// <summary>
+        /// The fleet up the tree this policy comes from; null when this fleet set it, or
+        /// <br/>            nobody did (automatic).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("inheritedFromFleetId")]
+        public string? InheritedFromFleetId { get; set; } = default!;
+
+        /// <summary>
+        /// What the fleet's devices get under this policy.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("targetVersionCode")]
+        public long? TargetVersionCode { get; set; } = default!;
+
+        /// <summary>
+        /// Newer versions that wait for approval (manual only), newest first.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("waiting")]
+        public System.Collections.Generic.List<WaitingVersionDto> Waiting { get; set; } = new System.Collections.Generic.List<WaitingVersionDto>();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class AppVersionDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("appId")]
+        public string AppId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("packageName")]
+        public string PackageName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("versionCode")]
+        public long VersionCode { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("versionName")]
+        public string VersionName { get; set; } = default!;
+
+        /// <summary>
+        /// held: devices don't get it. available: offered to the device, whose own app installs it
+        /// <br/>            when it is ready, through the Device SDK. enforced: every device in the app's fleets installs it.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("state")]
+        public string State { get; set; } = default!;
+
+        /// <summary>
+        /// SHA-256 of the signer's public key (apksigner's "public key SHA-256 digest").
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("signingKeySha256")]
+        public string SigningKeySha256 { get; set; } = default!;
+
+        /// <summary>
+        /// The permissions the APK asks for.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("permissions")]
+        public System.Collections.Generic.List<string> Permissions { get; set; } = new System.Collections.Generic.List<string>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("uploadedAt")]
+        public System.DateTimeOffset UploadedAt { get; set; } = default!;
+
+        /// <summary>
+        /// What OhrTech says about a catalog or platform release, such as the security fixes in it.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("notes")]
+        public string? Notes { get; set; } = default!;
+
+        /// <summary>
+        /// The release fixes security vulnerabilities.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("security")]
+        public bool Security { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class AppVersionSummaryDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("versionCode")]
+        public long VersionCode { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("versionName")]
+        public string VersionName { get; set; } = default!;
+
+        /// <summary>
+        /// held, available or enforced (see AppVersionDto).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("state")]
+        public string State { get; set; } = default!;
 
     }
 
@@ -4385,21 +7022,6 @@ namespace OhrTech.Management
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ClientDto
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("clientId")]
-        public long ClientId { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("clientName")]
-        public string ClientName { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("permissions")]
-        public System.Collections.Generic.List<string> Permissions { get; set; } = new System.Collections.Generic.List<string>();
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ConnectionDto
     {
 
@@ -4411,6 +7033,30 @@ namespace OhrTech.Management
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("token")]
         public string Token { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class CreateAppRequest
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("packageName")]
+        public string PackageName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string Name { get; set; } = default!;
+
+        /// <summary>
+        /// The organisation; needed only when you belong to more than one.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("orgId")]
+        public string? OrgId { get; set; } = default!;
+
+        /// <summary>
+        /// org (the default). catalog and platform are OhrTech's, and need OhrTech staff.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("kind")]
+        public string? Kind { get; set; } = default!;
 
     }
 
@@ -4431,7 +7077,7 @@ namespace OhrTech.Management
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("deviceId")]
-        public long DeviceId { get; set; } = default!;
+        public string DeviceId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("imei")]
         public string Imei { get; set; } = default!;
@@ -4442,14 +7088,14 @@ namespace OhrTech.Management
         [System.Text.Json.Serialization.JsonPropertyName("typeName")]
         public string TypeName { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("clientId")]
-        public long ClientId { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("orgId")]
+        public string OrgId { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("clientName")]
-        public string ClientName { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("orgName")]
+        public string OrgName { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("fleetId")]
-        public long? FleetId { get; set; } = default!;
+        public string? FleetId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("fleetName")]
         public string? FleetName { get; set; } = default!;
@@ -4487,14 +7133,14 @@ namespace OhrTech.Management
     }
 
     /// <summary>
-    /// One row of GET /v1/devices. The first twelve fields are what ohr 1.0 reads; the rest were added later.
+    /// One row of GET /v1/devices.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class DeviceDto
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("deviceId")]
-        public long DeviceId { get; set; } = default!;
+        public string DeviceId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("imei")]
         public string Imei { get; set; } = default!;
@@ -4502,14 +7148,14 @@ namespace OhrTech.Management
         [System.Text.Json.Serialization.JsonPropertyName("serial")]
         public string? Serial { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("clientId")]
-        public long ClientId { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("orgId")]
+        public string OrgId { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("clientName")]
-        public string ClientName { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("orgName")]
+        public string OrgName { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("fleetId")]
-        public long? FleetId { get; set; } = default!;
+        public string? FleetId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("fleetName")]
         public string? FleetName { get; set; } = default!;
@@ -4692,16 +7338,16 @@ namespace OhrTech.Management
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("fleetId")]
-        public long FleetId { get; set; } = default!;
+        public string FleetId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("fleetName")]
         public string FleetName { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("clientId")]
-        public long ClientId { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("orgId")]
+        public string OrgId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("parentFleetId")]
-        public long? ParentFleetId { get; set; } = default!;
+        public string? ParentFleetId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("deviceCount")]
         public int DeviceCount { get; set; } = default!;
@@ -4742,14 +7388,72 @@ namespace OhrTech.Management
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ManagedAppDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("appId")]
+        public string AppId { get; set; } = default!;
+
+        /// <summary>
+        /// org: your organisation's own app. catalog: provided by OhrTech; add it to your fleets.
+        /// <br/>            platform: part of the OS on every device, such as Vanadium System WebView; updated where the OS has it.
+        /// <br/>            OhrTech releases the versions of catalog and platform apps; each fleet chooses Automatic or Manual
+        /// <br/>            (GET /v1/fleets/{fleetId}/apps/{appId}/policy).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("kind")]
+        public string Kind { get; set; } = default!;
+
+        /// <summary>
+        /// The organisation the app belongs to; null for catalog and platform apps.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("orgId")]
+        public string? OrgId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("orgName")]
+        public string? OrgName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string Name { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("packageName")]
+        public string PackageName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("createdAt")]
+        public System.DateTimeOffset CreatedAt { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("latest")]
+        public AppVersionSummaryDto? Latest { get; set; } = default!;
+
+        /// <summary>
+        /// The version the app's fleets install: the newest enforced one (for a
+        /// <br/>            catalog or platform app, what Automatic fleets get).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("enforcedVersionCode")]
+        public long? EnforcedVersionCode { get; set; } = default!;
+
+        /// <summary>
+        /// The fleets whose devices get the app (your fleets, for a catalog app; none for a platform app).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("fleets")]
+        public System.Collections.Generic.List<AppFleetDto> Fleets { get; set; } = new System.Collections.Generic.List<AppFleetDto>();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class MeDto
     {
 
+        /// <summary>
+        /// The person (usr_…); null for a service account.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("userId")]
-        public long? UserId { get; set; } = default!;
+        public string? UserId { get; set; } = default!;
 
+        /// <summary>
+        /// The service account (sa_…); null for a person.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("serviceAccountId")]
-        public long? ServiceAccountId { get; set; } = default!;
+        public string? ServiceAccountId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("email")]
         public string Email { get; set; } = default!;
@@ -4764,8 +7468,8 @@ namespace OhrTech.Management
         /// The caller's organisations, each with every permission the caller holds there (a person holds the
         /// <br/>            device permissions through membership alone).
         /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("clients")]
-        public System.Collections.Generic.List<ClientDto> Clients { get; set; } = new System.Collections.Generic.List<ClientDto>();
+        [System.Text.Json.Serialization.JsonPropertyName("orgs")]
+        public System.Collections.Generic.List<OrgDto> Orgs { get; set; } = new System.Collections.Generic.List<OrgDto>();
 
         [System.Text.Json.Serialization.JsonPropertyName("serviceAccount")]
         public ServiceAccountLimitsDto? ServiceAccount { get; set; } = default!;
@@ -4780,7 +7484,7 @@ namespace OhrTech.Management
         /// The fleet to move the device to, or null for none. Required, so that a missing value never moves it.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("fleetId")]
-        public long? FleetId { get; set; } = default!;
+        public string? FleetId { get; set; } = default!;
 
     }
 
@@ -4828,7 +7532,7 @@ namespace OhrTech.Management
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("sessionId")]
-        public System.Guid SessionId { get; set; } = default!;
+        public string SessionId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("relayUrl")]
         public string RelayUrl { get; set; } = default!;
@@ -4865,6 +7569,21 @@ namespace OhrTech.Management
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("embedOrigins")]
         public System.Collections.Generic.List<string>? EmbedOrigins { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class OrgDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("orgId")]
+        public string OrgId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("orgName")]
+        public string OrgName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("permissions")]
+        public System.Collections.Generic.List<string> Permissions { get; set; } = new System.Collections.Generic.List<string>();
 
     }
 
@@ -4999,14 +7718,20 @@ namespace OhrTech.Management
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("sessionId")]
-        public System.Guid SessionId { get; set; } = default!;
+        public string SessionId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("deviceId")]
-        public long DeviceId { get; set; } = default!;
+        public string DeviceId { get; set; } = default!;
 
+        /// <summary>
+        /// pending, notified, awaiting_consent, active, closed, denied, failed.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("status")]
         public string Status { get; set; } = default!;
 
+        /// <summary>
+        /// unattended, notify or confirm: what the device was told to do.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("consent")]
         public string Consent { get; set; } = default!;
 
@@ -5052,6 +7777,107 @@ namespace OhrTech.Management
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RolloutDeviceDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("deviceId")]
+        public string DeviceId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("serial")]
+        public string? Serial { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("fleetId")]
+        public string? FleetId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("fleetName")]
+        public string? FleetName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("online")]
+        public bool Online { get; set; } = default!;
+
+        /// <summary>
+        /// The version of this app the device runs; null if it has none, or has
+        /// <br/>            the package as another app (a flavour it no longer gets, uninstalled before this one goes on).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("installedVersionCode")]
+        public long? InstalledVersionCode { get; set; } = default!;
+
+        /// <summary>
+        /// The version this device should run: the newest enforced one, or for a catalog or
+        /// <br/>            platform app on a Manual fleet, the version its organisation approved (null: none).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("targetVersionCode")]
+        public long? TargetVersionCode { get; set; } = default!;
+
+        /// <summary>
+        /// For a catalog or platform app: automatic or manual, its fleet's choice; null for an org app.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("policy")]
+        public string? Policy { get; set; } = default!;
+
+        /// <summary>
+        /// up_to_date; held (a Manual fleet: a newer version waits for its organisation's approval);
+        /// <br/>            pending (waiting for the device); waiting (downloaded, waiting for the fleet's update timing, such as the screen
+        /// <br/>            to be off); installing; failed.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public string Status { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("taskId")]
+        public string? TaskId { get; set; } = default!;
+
+        /// <summary>
+        /// Why it failed, as the device reported it; what a waiting device waits for; for a pending
+        /// <br/>            device that has the package as another app, which one.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("detail")]
+        public string? Detail { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RolloutDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("appId")]
+        public string AppId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("packageName")]
+        public string PackageName { get; set; } = default!;
+
+        /// <summary>
+        /// The newest enforced version: what devices install, unless their fleet is Manual.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("targetVersionCode")]
+        public long? TargetVersionCode { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("total")]
+        public int Total { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("upToDate")]
+        public int UpToDate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("held")]
+        public int Held { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("pending")]
+        public int Pending { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("waiting")]
+        public int Waiting { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("installing")]
+        public int Installing { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("failed")]
+        public int Failed { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("devices")]
+        public System.Collections.Generic.List<RolloutDeviceDto> Devices { get; set; } = new System.Collections.Generic.List<RolloutDeviceDto>();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class RunShellCommandRequest
     {
 
@@ -5083,19 +7909,61 @@ namespace OhrTech.Management
         /// The fleets it may act on, each with every fleet below it; null for the whole organisation.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("fleetIds")]
-        public System.Collections.Generic.List<long>? FleetIds { get; set; } = default!;
+        public System.Collections.Generic.List<string>? FleetIds { get; set; } = default!;
 
         /// <summary>
         /// Devices it may act on outside those fleets.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deviceIds")]
-        public System.Collections.Generic.List<long>? DeviceIds { get; set; } = default!;
+        public System.Collections.Generic.List<string>? DeviceIds { get; set; } = default!;
 
         /// <summary>
         /// The only web origins its remote control sessions may be embedded in; null for any.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("embedOrigins")]
         public System.Collections.Generic.List<string>? EmbedOrigins { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SetAppPolicyRequest
+    {
+
+        /// <summary>
+        /// automatic or manual.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("mode")]
+        public string Mode { get; set; } = default!;
+
+        /// <summary>
+        /// For manual: the version to approve; omitted, the version the fleet gets now.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("approvedVersionCode")]
+        public long? ApprovedVersionCode { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SetAppVersionStateRequest
+    {
+
+        /// <summary>
+        /// held, available or enforced; null leaves it.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("state")]
+        public string? State { get; set; } = default!;
+
+        /// <summary>
+        /// For a catalog or platform app (OhrTech staff): what the release changes; null leaves it.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("notes")]
+        public string? Notes { get; set; } = default!;
+
+        /// <summary>
+        /// For a catalog or platform app (OhrTech staff): the release fixes security vulnerabilities.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("security")]
+        public bool? Security { get; set; } = default!;
 
     }
 
@@ -5274,10 +8142,10 @@ namespace OhrTech.Management
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("taskId")]
-        public long TaskId { get; set; } = default!;
+        public string TaskId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("deviceId")]
-        public long DeviceId { get; set; } = default!;
+        public string DeviceId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("taskClass")]
         public string TaskClass { get; set; } = default!;
@@ -5345,6 +8213,131 @@ namespace OhrTech.Management
         [System.Text.Json.Serialization.JsonPropertyName("error")]
         public string Error { get; set; } = default!;
 
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UpdateAppRequest
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string Name { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UpdateTimingDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("fleetId")]
+        public string FleetId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("mode")]
+        public string Mode { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("days")]
+        public System.Collections.Generic.List<int>? Days { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("start")]
+        public string? Start { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("end")]
+        public string? End { get; set; } = default!;
+
+        /// <summary>
+        /// The fleet up the tree this timing comes from; null when this fleet set it or
+        /// <br/>            nobody did (screen_off).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("inheritedFromFleetId")]
+        public string? InheritedFromFleetId { get; set; } = default!;
+
+        /// <summary>
+        /// In words, such as "every day 02:00–05:00, or when the screen is off".
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+        public string Description { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UpdateTimingRequest
+    {
+
+        /// <summary>
+        /// screen_off: once nobody has used the device for 2 minutes. window: only inside the window, even
+        /// <br/>            in use. window_or_screen_off: either. immediate: at once, even mid-use.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("mode")]
+        public string Mode { get; set; } = default!;
+
+        /// <summary>
+        /// Days the window opens, 1 (Monday) to 7 (Sunday); empty or null: every day.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("days")]
+        public System.Collections.Generic.List<int>? Days { get; set; } = default!;
+
+        /// <summary>
+        /// Window start, HH:mm, the device's local time.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("start")]
+        public string? Start { get; set; } = default!;
+
+        /// <summary>
+        /// Window end, HH:mm; earlier than start, it runs past midnight.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("end")]
+        public string? End { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class WaitingVersionDto
+    {
+
+        /// <summary>
+        /// A version newer than what the fleet gets, waiting for approval.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("versionCode")]
+        public long VersionCode { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("versionName")]
+        public string VersionName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("releasedAt")]
+        public System.DateTimeOffset ReleasedAt { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("security")]
+        public bool Security { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("notes")]
+        public string? Notes { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class FileParameter
+    {
+        public FileParameter(System.IO.Stream data)
+            : this (data, null, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string? fileName)
+            : this (data, fileName, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string? fileName, string? contentType)
+        {
+            Data = data;
+            FileName = fileName;
+            ContentType = contentType;
+        }
+
+        public System.IO.Stream Data { get; private set; }
+
+        public string? FileName { get; private set; }
+
+        public string? ContentType { get; private set; }
     }
 
 

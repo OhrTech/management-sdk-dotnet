@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.0.0
+
+**Breaking:** ids are strings with a type prefix, such as `dev_01jftb4z0y9nn9yesabj71tyt0` (`dev_` a device, `flt_` a
+fleet, `app_` an app, `org_` an organisation, `tsk_` a task, `usr_` a person, `sa_` a service account, `adb_` and
+`rc_` sessions), where 1.x had numbers (and plain GUIDs for sessions). Organisations are `org`, not `client`:
+`DeviceDto.OrgId` and `OrgName`, `MeDto.Orgs`, and the `orgId` filters.
+
+- Apps: `ListAppsAsync`, `CreateAppAsync`, `GetAppAsync`, `UpdateAppAsync`, `ListAppVersionsAsync`,
+  `SetAppVersionStateAsync`, `GetAppRolloutAsync`, and a fleet's apps (`ListFleetAppsAsync`, `AddFleetAppAsync`,
+  `RemoveFleetAppAsync`).
+- `UploadApkAsync(appId, path, state)` uploads an APK file as the app's new version. The API refuses an APK of another
+  package, so a pipeline can't release the wrong app.
+- App kinds: `ManagedAppDto.Kind` is `org` (your own app), `catalog` (provided by OhrTech, such as the Vanadium
+  browser; add it to your fleets) or `platform` (part of the OS on every device, such as Vanadium System WebView).
+  OhrTech releases catalog and platform versions; `OrgId` and `OrgName` are null for them. Versions carry `Notes` and
+  `Security`.
+- Fleet update control: `GetFleetAppPolicyAsync`, `SetFleetAppPolicyAsync` (automatic, or manual: only the version
+  you approve, for as long as you like) and `ClearFleetAppPolicyAsync` for catalog and platform apps;
+  `GetUpdateTimingAsync`, `SetUpdateTimingAsync`, `ClearUpdateTimingAsync`: when a fleet's devices install app updates
+  (when the screen is off, in a maintenance window, either, or immediately).
+- Rollouts report `held` (a manual fleet waits for approval) and `waiting` (downloaded, waiting for the fleet's update
+  timing), and each device's `TargetVersionCode` and `Policy`.
+- `WaitForRolloutAsync(appId)` waits until every online device the app applies to runs its version, waits for its
+  fleet's update timing, is held, or failed; `untilInstalled: true` also waits for the timed installs.
+- `OhrManagementJsonContext` is public: serialize the API types in trimmed and native AOT apps.
+- The clients that `ForServiceAccount` and `ForUser` make allow 30 minutes per call (was 100 s), for large uploads.
+  A person's client no longer copies large request bodies in memory to resend them after a 401.
+
 ## 1.1.0
 
 - `RunShellCommandAsync`: run a shell command on a device, as `adb shell` would. It needs the

@@ -52,15 +52,16 @@ using var api = OhrManagementClient.ForUser(OhrUserSession.FromOhrCli());
 ## Use it
 
 Every API operation is a method (`IOhrManagementClient`), named after its operation id in the
-[reference](https://api.ohrtech.net/docs).
+[reference](https://api.ohrtech.net/docs). Everything is named by a string id with a type prefix:
+`dev_…` a device, `flt_…` a fleet, `app_…` an app, `org_…` an organisation, `tsk_…` a task.
 
 ```csharp
 foreach (var d in await api.ListDevicesAsync(online: true))
     Console.WriteLine($"{d.DeviceId} {d.Serial} {d.FleetName} battery {d.BatteryLevel}%");
 
-var device = await api.GetDeviceAsync(42);
-await api.ShowMessageAsync(42, new ShowMessageRequest { Text = "Please plug me in" });
-await api.UpdateDeviceSettingsAsync(42, new PolicyPatchDto
+var device = await api.GetDeviceAsync("dev_01jftb4z0y9nn9yesabj71tyt0");
+await api.ShowMessageAsync("dev_01jftb4z0y9nn9yesabj71tyt0", new ShowMessageRequest { Text = "Please plug me in" });
+await api.UpdateDeviceSettingsAsync("dev_01jftb4z0y9nn9yesabj71tyt0", new PolicyPatchDto
 {
     Settings = new() { ["display.brightness"] = new SettingPolicy { Mode = SettingMode.Locked, Value = 80 } }
 });
@@ -69,10 +70,22 @@ await api.UpdateDeviceSettingsAsync(42, new PolicyPatchDto
 Errors are `OhrApiException<ProblemDetails>` (or `OhrApiException<HttpValidationProblemDetails>`
 for invalid settings): `e.StatusCode`, `e.Result.Title`, `e.Result.Detail`.
 
+## Release your app
+
+```csharp
+// The app's id: ListAppsAsync(package: …) lists the apps with a package (flavours for different fleets may share one).
+var version = await api.UploadApkAsync("app_01jftb4z0y9nn9yesabj71tyt0", "app-release.apk", state: "enforced");
+var rollout = await api.WaitForRolloutAsync("app_01jftb4z0y9nn9yesabj71tyt0"); // every online device runs it, or failed
+```
+
+The API refuses an APK of another package than the app's, a version code that isn't newer, and a
+different signing key. From a build pipeline, the [`ohr` command line](https://github.com/OhrTech/ohr-cli)
+does the same in one step.
+
 ## Remote control in your web app
 
 ```csharp
-var rc = await api.OpenRemoteControlSessionAsync(42, new OpenRemoteControlRequest
+var rc = await api.OpenRemoteControlSessionAsync("dev_01jftb4z0y9nn9yesabj71tyt0", new OpenRemoteControlRequest
 {
     EmbedOrigins = new() { "https://support.example.com" }
 });

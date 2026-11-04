@@ -86,12 +86,13 @@ lines = [
     "",
     "namespace OhrTech.Management",
     "{",
+    "    /// <summary>Source-generated JSON metadata for every API type: use it to serialize them in trimmed and native AOT apps.</summary>",
     "    [System.Text.Json.Serialization.JsonSourceGenerationOptions]",
 ]
 lines += [f"    [System.Text.Json.Serialization.JsonSerializable(typeof({t}))]" for t in classes + enums]
 lines += [f"    [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<{t}>))]" for t in lists]
 lines += [
-    "    internal partial class OhrManagementJsonContext : System.Text.Json.Serialization.JsonSerializerContext",
+    "    public partial class OhrManagementJsonContext : System.Text.Json.Serialization.JsonSerializerContext",
     "    {",
     "    }",
     "}",

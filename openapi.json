@@ -15,6 +15,1557 @@
     }
   ],
   "paths": {
+    "/v1/apps": {
+      "get": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Your organisations' apps, and OhrTech's catalog and platform apps",
+        "operationId": "ListApps",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "query",
+            "description": "Only this organisation's own apps.",
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "package",
+            "in": "query",
+            "description": "Only apps with this package name (several apps may share one).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "description": "Only apps of this kind: org, catalog or platform.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ManagedAppDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Add an app: a package name and your name for it (several apps may share a package)",
+        "operationId": "CreateApp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAppRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedAppDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}": {
+      "get": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "One app, with its newest versions and fleets",
+        "operationId": "GetApp",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedAppDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Rename an app",
+        "operationId": "UpdateApp",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAppRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedAppDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/versions": {
+      "get": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "An app's versions, newest first",
+        "operationId": "ListAppVersions",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AppVersionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "The request body is the APK. It must be this app's package; its version code must be newer than every version already uploaded, and it must be signed with the same key (unless allowNewSigningKey). A 409 also carries appId, packageName and versionCode, plus latestVersionCode and exists (that version code is already uploaded) or the two keys' signingKeySha256 and expectedSigningKeySha256, so a pipeline that runs again can tell its own earlier upload from a mistake.",
+        "operationId": "UploadApk",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "held (the default), available or enforced.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "allowNewSigningKey",
+            "in": "query",
+            "description": "Accept an APK signed with a different key than the previous version.\n            Devices refuse such an update unless the new key is a rotation (APK signature scheme v3) of the old one.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The APK file.",
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppVersionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/versions/{versionCode}": {
+      "patch": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Hold, offer or enforce a version (and, for OhrTech's apps, its notes)",
+        "operationId": "SetAppVersionState",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "versionCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetAppVersionStateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppVersionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/rollout": {
+      "get": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Which devices run the enforced version, and which are still getting it",
+        "operationId": "GetAppRollout",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RolloutDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleets/{fleetId}/apps": {
+      "get": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "The apps a fleet's devices get",
+        "operationId": "ListFleetApps",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ManagedAppDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleets/{fleetId}/apps/{appId}": {
+      "put": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Give an app to a fleet's devices",
+        "operationId": "AddFleetApp",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Stop giving an app to a fleet's devices: they uninstall it",
+        "operationId": "RemoveFleetApp",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/v1/fleets/{fleetId}/apps/{appId}/policy": {
+      "get": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Whether a fleet gets an OhrTech app's updates automatically or only once approved",
+        "operationId": "GetFleetAppPolicy",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppPolicyDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Manual keeps the fleet's devices on the approved version for as long as the organisation wants:\nswitching to manual without a version approves what the fleet gets now. Approving a version moves\nthe devices to it at the fleet's update timing; devices never go back to an older one.",
+        "operationId": "SetFleetAppPolicy",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetAppPolicyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppPolicyDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Let a fleet follow its parent's policy for an OhrTech app again",
+        "operationId": "ClearFleetAppPolicy",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppPolicyDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleets/{fleetId}/update-timing": {
+      "get": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "When a fleet's devices install app updates",
+        "operationId": "GetUpdateTiming",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateTimingDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Set when a fleet's devices install app updates: screen off, a maintenance window, or immediately",
+        "operationId": "SetUpdateTiming",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTimingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateTimingDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Apps"
+        ],
+        "summary": "Let a fleet follow its parent's update timing again",
+        "operationId": "ClearUpdateTiming",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateTimingDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/me": {
       "get": {
         "tags": [
@@ -95,22 +1646,24 @@
         "operationId": "ListDevices",
         "parameters": [
           {
-            "name": "clientId",
+            "name": "orgId",
             "in": "query",
             "description": "Only this organisation's devices.",
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
           },
           {
             "name": "fleetId",
             "in": "query",
             "description": "Only devices directly in this fleet.",
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
           },
           {
             "name": "online",
@@ -199,11 +1752,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -281,11 +1836,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "requestBody": {
@@ -366,11 +1923,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -451,11 +2010,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -536,11 +2097,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -616,13 +2179,14 @@
         "operationId": "ListFleets",
         "parameters": [
           {
-            "name": "clientId",
+            "name": "orgId",
             "in": "query",
             "description": "Only this organisation's fleets.",
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -703,11 +2267,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           },
           {
             "name": "limit",
@@ -795,11 +2361,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "requestBody": {
@@ -887,11 +2455,13 @@
           {
             "name": "sessionId",
             "in": "path",
+            "description": "A remote ADB session id (adb_\u2026).",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+              "pattern": "^adb_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "adb_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -967,11 +2537,13 @@
           {
             "name": "sessionId",
             "in": "path",
+            "description": "A remote ADB session id (adb_\u2026).",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+              "pattern": "^adb_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "adb_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -1042,11 +2614,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           },
           {
             "name": "limit",
@@ -1134,11 +2708,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "requestBody": {
@@ -1225,11 +2801,13 @@
           {
             "name": "sessionId",
             "in": "path",
+            "description": "A remote control session id (rc_\u2026).",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+              "pattern": "^rc_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "rc_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -1305,11 +2883,13 @@
           {
             "name": "sessionId",
             "in": "path",
+            "description": "A remote control session id (rc_\u2026).",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+              "pattern": "^rc_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "rc_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -1380,11 +2960,13 @@
           {
             "name": "sessionId",
             "in": "path",
+            "description": "A remote control session id (rc_\u2026).",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+              "pattern": "^rc_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "rc_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -1536,11 +3118,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -1616,11 +3200,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "requestBody": {
@@ -1706,11 +3292,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "requestBody": {
@@ -1798,11 +3386,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "requestBody": {
@@ -1987,11 +3577,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           },
           {
             "name": "limit",
@@ -2005,11 +3597,12 @@
           {
             "name": "before",
             "in": "query",
-            "description": "Only tasks with a smaller id: pass the last taskId of the previous page.",
+            "description": "Only tasks older than this one: pass the last taskId of the previous page.",
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^tsk_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "tsk_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -2088,11 +3681,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "requestBody": {
@@ -2180,20 +3775,24 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           },
           {
             "name": "taskId",
             "in": "path",
+            "description": "A task id (tsk_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^tsk_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "tsk_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "responses": {
@@ -2271,11 +3870,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "requestBody": {
@@ -2363,11 +3964,13 @@
           {
             "name": "deviceId",
             "in": "path",
+            "description": "A device id (dev_\u2026).",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
           }
         ],
         "requestBody": {
@@ -2486,12 +4089,10 @@
         "type": "object",
         "properties": {
           "sessionId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
           "deviceId": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           "status": {
             "type": "string"
@@ -2571,6 +4172,157 @@
         },
         "additionalProperties": false
       },
+      "AppFleetDto": {
+        "required": [
+          "fleetId",
+          "fleetName"
+        ],
+        "type": "object",
+        "properties": {
+          "fleetId": {
+            "type": "string"
+          },
+          "fleetName": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AppPolicyDto": {
+        "required": [
+          "appId",
+          "fleetId",
+          "mode",
+          "waiting"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "fleetId": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "description": "automatic: each version OhrTech enforces. manual: only the version approved here; nothing newer\n            until someone in the organisation approves it. OhrTech can't override a manual fleet."
+          },
+          "approvedVersionCode": {
+            "type": "integer",
+            "description": "For manual: the version the fleet's devices may run (null: none newer than what\n            each device has). Devices never go back to an older version.",
+            "format": "int64",
+            "nullable": true
+          },
+          "approvedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "approvedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "inheritedFromFleetId": {
+            "type": "string",
+            "description": "The fleet up the tree this policy comes from; null when this fleet set it, or\n            nobody did (automatic).",
+            "nullable": true
+          },
+          "targetVersionCode": {
+            "type": "integer",
+            "description": "What the fleet's devices get under this policy.",
+            "format": "int64",
+            "nullable": true
+          },
+          "waiting": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WaitingVersionDto"
+            },
+            "description": "Newer versions that wait for approval (manual only), newest first."
+          }
+        },
+        "additionalProperties": false
+      },
+      "AppVersionDto": {
+        "required": [
+          "appId",
+          "packageName",
+          "permissions",
+          "security",
+          "signingKeySha256",
+          "state",
+          "uploadedAt",
+          "versionCode",
+          "versionName"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "versionCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "versionName": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "description": "held: devices don't get it. available: offered to the device, whose own app installs it\n            when it is ready, through the Device SDK. enforced: every device in the app's fleets installs it."
+          },
+          "signingKeySha256": {
+            "type": "string",
+            "description": "SHA-256 of the signer's public key (apksigner's \"public key SHA-256 digest\")."
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The permissions the APK asks for."
+          },
+          "uploadedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string",
+            "description": "What OhrTech says about a catalog or platform release, such as the security fixes in it.",
+            "nullable": true
+          },
+          "security": {
+            "type": "boolean",
+            "description": "The release fixes security vulnerabilities."
+          }
+        },
+        "additionalProperties": false
+      },
+      "AppVersionSummaryDto": {
+        "required": [
+          "state",
+          "versionCode",
+          "versionName"
+        ],
+        "type": "object",
+        "properties": {
+          "versionCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "versionName": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "description": "held, available or enforced (see AppVersionDto)."
+          }
+        },
+        "additionalProperties": false
+      },
       "BatteryDto": {
         "required": [
           "charging"
@@ -2640,30 +4392,6 @@
         },
         "additionalProperties": false
       },
-      "ClientDto": {
-        "required": [
-          "clientId",
-          "clientName",
-          "permissions"
-        ],
-        "type": "object",
-        "properties": {
-          "clientId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "clientName": {
-            "type": "string"
-          },
-          "permissions": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
       "ConnectionDto": {
         "required": [
           "token",
@@ -2677,6 +4405,32 @@
           "token": {
             "type": "string",
             "description": "A LiveKit participant token; it can be used to join for 10 minutes."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateAppRequest": {
+        "required": [
+          "name",
+          "packageName"
+        ],
+        "type": "object",
+        "properties": {
+          "packageName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "orgId": {
+            "type": "string",
+            "description": "The organisation; needed only when you belong to more than one.",
+            "nullable": true
+          },
+          "kind": {
+            "type": "string",
+            "description": "org (the default). catalog and platform are OhrTech's, and need OhrTech staff.",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2705,13 +4459,13 @@
           "agent",
           "battery",
           "capabilities",
-          "clientId",
-          "clientName",
           "createdAt",
           "deviceId",
           "imei",
           "network",
           "online",
+          "orgId",
+          "orgName",
           "os",
           "settings",
           "typeName"
@@ -2719,8 +4473,7 @@
         "type": "object",
         "properties": {
           "deviceId": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           "imei": {
             "type": "string"
@@ -2732,16 +4485,14 @@
           "typeName": {
             "type": "string"
           },
-          "clientId": {
-            "type": "integer",
-            "format": "int64"
+          "orgId": {
+            "type": "string"
           },
-          "clientName": {
+          "orgName": {
             "type": "string"
           },
           "fleetId": {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
             "nullable": true
           },
           "fleetName": {
@@ -2789,11 +4540,11 @@
         "required": [
           "agentOutdated",
           "charging",
-          "clientId",
-          "clientName",
           "deviceId",
           "imei",
           "online",
+          "orgId",
+          "orgName",
           "remoteAdb",
           "remoteControl",
           "settingsErrors",
@@ -2803,8 +4554,7 @@
         "type": "object",
         "properties": {
           "deviceId": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           "imei": {
             "type": "string"
@@ -2813,16 +4563,14 @@
             "type": "string",
             "nullable": true
           },
-          "clientId": {
-            "type": "integer",
-            "format": "int64"
+          "orgId": {
+            "type": "string"
           },
-          "clientName": {
+          "orgName": {
             "type": "string"
           },
           "fleetId": {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
             "nullable": true
           },
           "fleetName": {
@@ -2891,7 +4639,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "One row of GET /v1/devices. The first twelve fields are what ohr 1.0 reads; the rest were added later."
+        "description": "One row of GET /v1/devices."
       },
       "DeviceLoginRequest": {
         "type": "object",
@@ -3052,27 +4800,24 @@
       },
       "FleetDto": {
         "required": [
-          "clientId",
           "deviceCount",
           "fleetId",
-          "fleetName"
+          "fleetName",
+          "orgId"
         ],
         "type": "object",
         "properties": {
           "fleetId": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           "fleetName": {
             "type": "string"
           },
-          "clientId": {
-            "type": "integer",
-            "format": "int64"
+          "orgId": {
+            "type": "string"
           },
           "parentFleetId": {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
             "nullable": true
           },
           "deviceCount": {
@@ -3121,23 +4866,79 @@
         },
         "additionalProperties": {}
       },
+      "ManagedAppDto": {
+        "required": [
+          "appId",
+          "createdAt",
+          "fleets",
+          "kind",
+          "name",
+          "packageName"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "description": "org: your organisation's own app. catalog: provided by OhrTech; add it to your fleets.\n            platform: part of the OS on every device, such as Vanadium System WebView; updated where the OS has it.\n            OhrTech releases the versions of catalog and platform apps; each fleet chooses Automatic or Manual\n            (GET /v1/fleets/{fleetId}/apps/{appId}/policy)."
+          },
+          "orgId": {
+            "type": "string",
+            "description": "The organisation the app belongs to; null for catalog and platform apps.",
+            "nullable": true
+          },
+          "orgName": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "latest": {
+            "$ref": "#/components/schemas/AppVersionSummaryDto"
+          },
+          "enforcedVersionCode": {
+            "type": "integer",
+            "description": "The version the app's fleets install: the newest enforced one (for a\n            catalog or platform app, what Automatic fleets get).",
+            "format": "int64",
+            "nullable": true
+          },
+          "fleets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AppFleetDto"
+            },
+            "description": "The fleets whose devices get the app (your fleets, for a catalog app; none for a platform app)."
+          }
+        },
+        "additionalProperties": false
+      },
       "MeDto": {
         "required": [
-          "clients",
           "email",
           "globalAdmin",
-          "globalPermissions"
+          "globalPermissions",
+          "orgs"
         ],
         "type": "object",
         "properties": {
           "userId": {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
+            "description": "The person (usr_\u2026); null for a service account.",
             "nullable": true
           },
           "serviceAccountId": {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
+            "description": "The service account (sa_\u2026); null for a person.",
             "nullable": true
           },
           "email": {
@@ -3152,10 +4953,10 @@
               "type": "string"
             }
           },
-          "clients": {
+          "orgs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ClientDto"
+              "$ref": "#/components/schemas/OrgDto"
             },
             "description": "The caller's organisations, each with every permission the caller holds there (a person holds the\n            device permissions through membership alone)."
           },
@@ -3172,9 +4973,8 @@
         "type": "object",
         "properties": {
           "fleetId": {
-            "type": "integer",
+            "type": "string",
             "description": "The fleet to move the device to, or null for none. Required, so that a missing value never moves it.",
-            "format": "int64",
             "nullable": true
           }
         },
@@ -3243,8 +5043,7 @@
         "type": "object",
         "properties": {
           "sessionId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
           "relayUrl": {
             "type": "string"
@@ -3282,6 +5081,29 @@
             },
             "description": "Web origins (https://app.example.com) that may show the viewer page in an iframe. At most 5. A service account limited to some sites may name only those; naming none then means all of them.",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrgDto": {
+        "required": [
+          "orgId",
+          "orgName",
+          "permissions"
+        ],
+        "type": "object",
+        "properties": {
+          "orgId": {
+            "type": "string"
+          },
+          "orgName": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "additionalProperties": false
@@ -3438,18 +5260,18 @@
         "type": "object",
         "properties": {
           "sessionId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
           "deviceId": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "description": "pending, notified, awaiting_consent, active, closed, denied, failed."
           },
           "consent": {
-            "type": "string"
+            "type": "string",
+            "description": "unattended, notify or confirm: what the device was told to do."
           },
           "actor": {
             "type": "string"
@@ -3508,6 +5330,129 @@
         },
         "additionalProperties": false
       },
+      "RolloutDeviceDto": {
+        "required": [
+          "deviceId",
+          "online",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          },
+          "serial": {
+            "type": "string",
+            "nullable": true
+          },
+          "fleetId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fleetName": {
+            "type": "string",
+            "nullable": true
+          },
+          "online": {
+            "type": "boolean"
+          },
+          "installedVersionCode": {
+            "type": "integer",
+            "description": "The version of this app the device runs; null if it has none, or has\n            the package as another app (a flavour it no longer gets, uninstalled before this one goes on).",
+            "format": "int64",
+            "nullable": true
+          },
+          "targetVersionCode": {
+            "type": "integer",
+            "description": "The version this device should run: the newest enforced one, or for a catalog or\n            platform app on a Manual fleet, the version its organisation approved (null: none).",
+            "format": "int64",
+            "nullable": true
+          },
+          "policy": {
+            "type": "string",
+            "description": "For a catalog or platform app: automatic or manual, its fleet's choice; null for an org app.",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "up_to_date; held (a Manual fleet: a newer version waits for its organisation's approval);\n            pending (waiting for the device); waiting (downloaded, waiting for the fleet's update timing, such as the screen\n            to be off); installing; failed."
+          },
+          "taskId": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "description": "Why it failed, as the device reported it; what a waiting device waits for; for a pending\n            device that has the package as another app, which one.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RolloutDto": {
+        "required": [
+          "appId",
+          "devices",
+          "failed",
+          "held",
+          "installing",
+          "packageName",
+          "pending",
+          "total",
+          "upToDate",
+          "waiting"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "targetVersionCode": {
+            "type": "integer",
+            "description": "The newest enforced version: what devices install, unless their fleet is Manual.",
+            "format": "int64",
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "upToDate": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "held": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pending": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "waiting": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "installing": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "devices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RolloutDeviceDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "RunShellCommandRequest": {
         "required": [
           "command"
@@ -3539,8 +5484,7 @@
           "fleetIds": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             },
             "description": "The fleets it may act on, each with every fleet below it; null for the whole organisation.",
             "nullable": true
@@ -3548,8 +5492,7 @@
           "deviceIds": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             },
             "description": "Devices it may act on outside those fleets.",
             "nullable": true
@@ -3560,6 +5503,46 @@
               "type": "string"
             },
             "description": "The only web origins its remote control sessions may be embedded in; null for any.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetAppPolicyRequest": {
+        "required": [
+          "mode"
+        ],
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "description": "automatic or manual."
+          },
+          "approvedVersionCode": {
+            "type": "integer",
+            "description": "For manual: the version to approve; omitted, the version the fleet gets now.",
+            "format": "int64",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetAppVersionStateRequest": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "description": "held, available or enforced; null leaves it.",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "description": "For a catalog or platform app (OhrTech staff): what the release changes; null leaves it.",
+            "nullable": true
+          },
+          "security": {
+            "type": "boolean",
+            "description": "For a catalog or platform app (OhrTech staff): the release fixes security vulnerabilities.",
             "nullable": true
           }
         },
@@ -3763,12 +5746,10 @@
         "type": "object",
         "properties": {
           "taskId": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           "deviceId": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           "taskClass": {
             "type": "string"
@@ -3851,6 +5832,123 @@
           }
         },
         "additionalProperties": false
+      },
+      "UpdateAppRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateTimingDto": {
+        "required": [
+          "description",
+          "fleetId",
+          "mode"
+        ],
+        "type": "object",
+        "properties": {
+          "fleetId": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "start": {
+            "type": "string",
+            "nullable": true
+          },
+          "end": {
+            "type": "string",
+            "nullable": true
+          },
+          "inheritedFromFleetId": {
+            "type": "string",
+            "description": "The fleet up the tree this timing comes from; null when this fleet set it or\n            nobody did (screen_off).",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "In words, such as \"every day 02:00\u201305:00, or when the screen is off\"."
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateTimingRequest": {
+        "required": [
+          "mode"
+        ],
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "description": "screen_off: once nobody has used the device for 2 minutes. window: only inside the window, even\n            in use. window_or_screen_off: either. immediate: at once, even mid-use."
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Days the window opens, 1 (Monday) to 7 (Sunday); empty or null: every day.",
+            "nullable": true
+          },
+          "start": {
+            "type": "string",
+            "description": "Window start, HH:mm, the device's local time.",
+            "nullable": true
+          },
+          "end": {
+            "type": "string",
+            "description": "Window end, HH:mm; earlier than start, it runs past midnight.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaitingVersionDto": {
+        "required": [
+          "releasedAt",
+          "security",
+          "versionCode",
+          "versionName"
+        ],
+        "type": "object",
+        "properties": {
+          "versionCode": {
+            "type": "integer",
+            "description": "A version newer than what the fleet gets, waiting for approval.",
+            "format": "int64"
+          },
+          "versionName": {
+            "type": "string"
+          },
+          "releasedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "security": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       }
     },
     "securitySchemes": {
@@ -3867,6 +5965,9 @@
     }
   ],
   "tags": [
+    {
+      "name": "Apps"
+    },
     {
       "name": "Devices"
     },

@@ -19,6 +19,12 @@ namespace OhrTech.Management
         /// <summary>https://api.ohrtech.net/</summary>
         public static readonly Uri DefaultBaseUrl = new Uri("https://api.ohrtech.net/");
 
+        /// <summary>
+        /// How long one call may take on the HttpClient these factories make: long enough to upload a large APK.
+        /// Pass a CancellationToken for a shorter limit.
+        /// </summary>
+        public static readonly TimeSpan RequestTimeout = TimeSpan.FromMinutes(30);
+
         private HttpClient? _ownedHttpClient;
 
         /// <summary>A client that calls the API as an organisation's service account.</summary>
@@ -29,7 +35,8 @@ namespace OhrTech.Management
         {
             var http = new HttpClient(new OhrServiceTokenHandler(token) { InnerHandler = innerHandler ?? new HttpClientHandler() })
             {
-                BaseAddress = WithSlash(baseUrl ?? DefaultBaseUrl)
+                BaseAddress = WithSlash(baseUrl ?? DefaultBaseUrl),
+                Timeout = RequestTimeout
             };
             return new OhrManagementClient(http) { _ownedHttpClient = http };
         }
@@ -41,7 +48,8 @@ namespace OhrTech.Management
             if (session == null) throw new ArgumentNullException(nameof(session));
             var http = new HttpClient(new OhrUserSessionHandler(session) { InnerHandler = innerHandler ?? new HttpClientHandler() })
             {
-                BaseAddress = session.BaseUrl
+                BaseAddress = session.BaseUrl,
+                Timeout = RequestTimeout
             };
             return new OhrManagementClient(http) { _ownedHttpClient = http };
         }

@@ -35,16 +35,22 @@ namespace OhrTech.Management
     {
         private readonly OhrUserSession _session;
 
+        private const long RetryBufferLimit = 1024 * 1024;
+
         public OhrUserSessionHandler(OhrUserSession session) => _session = session ?? throw new ArgumentNullException(nameof(session));
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            // Kept so the request can be sent again: a request message can only be sent once.
-            var body = request.Content == null ? null : await request.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            // Kept so the request can be sent again: a request message can only be sent once. A large body
+            // (an APK) is not copied: the token was fresh when it went, so a 401 for it is answered as is.
+            var length = request.Content?.Headers.ContentLength;
+            var body = request.Content == null || length is null or > RetryBufferLimit
+                ? null
+                : await request.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             var token = await _session.GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-            if (response.StatusCode != HttpStatusCode.Unauthorized) return response;
+            if (response.StatusCode != HttpStatusCode.Unauthorized || (request.Content != null && body == null)) return response;
 
             var fresh = await _session.RefreshAsync(token, cancellationToken).ConfigureAwait(false);
             if (fresh == token) return response;
