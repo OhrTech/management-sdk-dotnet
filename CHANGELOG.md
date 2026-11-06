@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.0
+
+- Privileged Android permissions by OhrTech approval: `ListAppPermissionsAsync` (each privileged permission an
+  app's versions request: `granted`, `waiting` or `never`) and `ListOrgPermissionApprovalsAsync`; for OhrTech
+  staff, `ApproveOrgPermissionAsync`, `WithdrawOrgPermissionAsync`, `ApproveAppPermissionAsync` and
+  `WithdrawAppPermissionAsync`.
+
 ## 2.0.0
 
 **Breaking:** ids are strings with a type prefix, such as `dev_01jftb4z0y9nn9yesabj71tyt0` (`dev_` a device, `flt_` a

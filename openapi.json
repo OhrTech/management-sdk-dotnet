@@ -2256,6 +2256,548 @@
         }
       }
     },
+    "/v1/orgs/{orgId}/permission-approvals": {
+      "get": {
+        "tags": [
+          "Permissions"
+        ],
+        "summary": "The privileged permissions OhrTech approved for an organisation's apps",
+        "operationId": "ListOrgPermissionApprovals",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "An organisation id (org_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionApprovalDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{orgId}/permission-approvals/{permission}": {
+      "put": {
+        "tags": [
+          "Permissions"
+        ],
+        "summary": "OhrTech only: let every app of an organisation that requests a privileged permission have it",
+        "operationId": "ApproveOrgPermission",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "An organisation id (org_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "permission",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovePermissionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermissionApprovalDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Permissions"
+        ],
+        "summary": "OhrTech only: withdraw an organisation's approval; its devices revoke the permission",
+        "operationId": "WithdrawOrgPermission",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "An organisation id (org_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "permission",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/permissions": {
+      "get": {
+        "tags": [
+          "Permissions"
+        ],
+        "summary": "The privileged permissions an app requests, and whether its devices get them",
+        "operationId": "ListAppPermissions",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AppPermissionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/permission-approvals/{permission}": {
+      "put": {
+        "tags": [
+          "Permissions"
+        ],
+        "summary": "OhrTech only: grant a privileged permission to one of OhrTech's apps, in every organisation",
+        "operationId": "ApproveAppPermission",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "permission",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovePermissionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermissionApprovalDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Permissions"
+        ],
+        "summary": "OhrTech only: withdraw an OhrTech app's approval; devices revoke the permission",
+        "operationId": "WithdrawAppPermission",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "permission",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
     "/v1/devices/{deviceId}/adb-sessions": {
       "get": {
         "tags": [
@@ -4188,11 +4730,48 @@
         },
         "additionalProperties": false
       },
+      "AppPermissionDto": {
+        "required": [
+          "permission",
+          "state",
+          "versionCodes"
+        ],
+        "type": "object",
+        "properties": {
+          "permission": {
+            "type": "string",
+            "description": "A privileged permission one of the app's versions requests."
+          },
+          "state": {
+            "type": "string",
+            "description": "granted: approved, so the app's devices get it. waiting: no approval yet; the app runs\n            without it. never: OhrTech never grants it (it would let an app escalate further or escape management)."
+          },
+          "approvedFor": {
+            "type": "string",
+            "description": "Where the approval comes from: org (the app's organisation) or app (this OhrTech\n            app); null when not granted.",
+            "nullable": true
+          },
+          "versionCodes": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "The versions that request it."
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "AppPolicyDto": {
         "required": [
           "appId",
           "fleetId",
           "mode",
+          "reminders",
           "waiting"
         ],
         "type": "object",
@@ -4239,6 +4818,10 @@
               "$ref": "#/components/schemas/WaitingVersionDto"
             },
             "description": "Newer versions that wait for approval (manual only), newest first."
+          },
+          "reminders": {
+            "type": "boolean",
+            "description": "For manual: the organisation is emailed weekly while a security release waits."
           }
         },
         "additionalProperties": false
@@ -4319,6 +4902,17 @@
           "state": {
             "type": "string",
             "description": "held, available or enforced (see AppVersionDto)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApprovePermissionRequest": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string",
+            "description": "Why OhrTech approves it, kept with the approval.",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -5137,6 +5731,34 @@
         },
         "additionalProperties": false
       },
+      "PermissionApprovalDto": {
+        "required": [
+          "approvedAt",
+          "approvedBy",
+          "permission"
+        ],
+        "type": "object",
+        "properties": {
+          "permission": {
+            "type": "string",
+            "description": "The Android permission, e.g. android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST."
+          },
+          "note": {
+            "type": "string",
+            "description": "What OhrTech said when approving it.",
+            "nullable": true
+          },
+          "approvedBy": {
+            "type": "string",
+            "description": "Who at OhrTech approved it."
+          },
+          "approvedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "PolicyDto": {
         "required": [
           "settings"
@@ -5523,6 +6145,11 @@
             "description": "For manual: the version to approve; omitted, the version the fleet gets now.",
             "format": "int64",
             "nullable": true
+          },
+          "reminders": {
+            "type": "boolean",
+            "description": "Email weekly reminders while a security release waits (default true); null leaves it.",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -5895,7 +6522,7 @@
         "properties": {
           "mode": {
             "type": "string",
-            "description": "screen_off: once nobody has used the device for 2 minutes. window: only inside the window, even\n            in use. window_or_screen_off: either. immediate: at once, even mid-use."
+            "description": "screen_off: once nobody has used the device for 2 minutes. window: only inside the window, even\n            in use. window_or_screen_off: either. immediate: at once, even mid-use. Only updates wait: an app the device\n            doesn't have yet (just assigned to the fleet, or a device new to the fleet) always installs at once."
           },
           "days": {
             "type": "array",
@@ -5973,6 +6600,9 @@
     },
     {
       "name": "Fleets"
+    },
+    {
+      "name": "Permissions"
     },
     {
       "name": "Remote ADB"
