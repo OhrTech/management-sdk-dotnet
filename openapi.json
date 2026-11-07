@@ -1566,6 +1566,494 @@
         }
       }
     },
+    "/v1/fleets/{fleetId}/apps/{appId}/sdk-access": {
+      "get": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "What an app may change through the Device SDK on the fleet's devices",
+        "operationId": "GetSdkAccess",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SdkAccessDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "Grant an app Device SDK areas on the fleet's devices (and the fleets below it)",
+        "operationId": "SetSdkAccess",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetSdkAccessRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SdkAccessDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "Drop the fleet's own grant for an app, so it inherits its parent fleet's",
+        "operationId": "ClearSdkAccess",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SdkAccessDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/key-attestations/verify": {
+      "post": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "Check that an app's Device SDK key (OhrKeys) was made in this device's TEE, for that app and your challenge",
+        "operationId": "VerifyKeyAttestation",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeyAttestationDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyAttestationVerdictDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/events": {
+      "get": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "What apps changed through the Device SDK, and what the Agent refused, newest first",
+        "operationId": "ListDeviceEvents",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeviceEventDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/me": {
       "get": {
         "tags": [
@@ -2794,6 +3282,255 @@
           },
           "204": {
             "description": "No Content"
+          }
+        }
+      }
+    },
+    "/v1/push": {
+      "post": {
+        "tags": [
+          "Push"
+        ],
+        "summary": "Send sealed, signed push messages to apps' push tokens (up to 500)",
+        "operationId": "SendPush",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/push/{id}": {
+      "get": {
+        "tags": [
+          "Push"
+        ],
+        "summary": "Where a push message is: queued, sent, delivered, dropped, expired or replaced",
+        "operationId": "GetPushStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushStatusDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/push-tokens": {
+      "get": {
+        "tags": [
+          "Push"
+        ],
+        "summary": "The device's active push tokens: one per app that registered for push",
+        "operationId": "ListPushTokens",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PushTokenDto"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -5235,6 +5972,49 @@
         "additionalProperties": false,
         "description": "One row of GET /v1/devices."
       },
+      "DeviceEventDto": {
+        "required": [
+          "action",
+          "area",
+          "at",
+          "receivedAt",
+          "result",
+          "source"
+        ],
+        "type": "object",
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "receivedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "source": {
+            "type": "string"
+          },
+          "appId": {
+            "type": "string",
+            "nullable": true
+          },
+          "packageName": {
+            "type": "string",
+            "nullable": true
+          },
+          "area": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string"
+          },
+          "detail": {}
+        },
+        "additionalProperties": false
+      },
       "DeviceLoginRequest": {
         "type": "object",
         "properties": {
@@ -5459,6 +6239,64 @@
           }
         },
         "additionalProperties": {}
+      },
+      "KeyAttestationDto": {
+        "required": [
+          "alg",
+          "challenge",
+          "coseSign1",
+          "diceChain",
+          "owner",
+          "publicKey"
+        ],
+        "type": "object",
+        "properties": {
+          "alg": {
+            "type": "string"
+          },
+          "publicKey": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "challenge": {
+            "type": "string"
+          },
+          "coseSign1": {
+            "type": "string"
+          },
+          "diceChain": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A key attestation as the app got it from OhrKeys.attest (byte fields base64), and the challenge you issued."
+      },
+      "KeyAttestationVerdictDto": {
+        "required": [
+          "valid"
+        ],
+        "type": "object",
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "appId": {
+            "type": "string",
+            "nullable": true
+          },
+          "packageName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Whether the key was made in this device's TEE for that app, bound to that challenge.\nReason says why not; AppId and PackageName are the app it belongs to."
       },
       "ManagedAppDto": {
         "required": [
@@ -5818,6 +6656,85 @@
         },
         "additionalProperties": {}
       },
+      "PushRequest": {
+        "required": [
+          "messages"
+        ],
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PushRequestMessage"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "PushRequestMessage": {
+        "required": [
+          "message",
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The app's push token (psh_\u2026)."
+          },
+          "message": {
+            "type": "string",
+            "description": "The sealed, signed envelope, base64 (PushSealer, or docs/push.md \u00a72)."
+          },
+          "priority": {
+            "type": "string",
+            "description": "\"normal\" (default) or \"high\": wakes the device from Doze and lets the app start a foreground service.",
+            "nullable": true
+          },
+          "ttl": {
+            "type": "integer",
+            "description": "Seconds the hub keeps trying, 1 to 2,419,200 (28 days); default 86,400.",
+            "format": "int32",
+            "nullable": true
+          },
+          "collapseKey": {
+            "type": "string",
+            "description": "A message still on its way with the same token and key is replaced.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PushResponse": {
+        "required": [
+          "results"
+        ],
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PushResult"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "PushResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Per message, in order: its id (pmsg_\u2026), or why it was refused."
+      },
       "PushSettingsRequest": {
         "type": "object",
         "properties": {
@@ -5828,6 +6745,80 @@
             },
             "description": "Set settings to apply again now, overwriting what the person at the device changed them to.",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PushStatusDto": {
+        "required": [
+          "attempts",
+          "createdAt",
+          "expiresAt",
+          "id",
+          "status",
+          "statusAt",
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "description": "queued, sent, delivered, dropped, expired or replaced."
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "statusAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attempts": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PushTokenDto": {
+        "required": [
+          "appId",
+          "createdAt",
+          "packageName",
+          "suite",
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "appId": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "suite": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -6100,6 +7091,51 @@
         },
         "additionalProperties": false
       },
+      "SdkAccessDto": {
+        "required": [
+          "alwaysAllowed",
+          "appId",
+          "areas",
+          "fleetId"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "fleetId": {
+            "type": "string"
+          },
+          "areas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What the app may change on this fleet's devices: this fleet's grant, or the nearest parent fleet's."
+          },
+          "own": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "This fleet's own grant, or null when it inherits one (or none).",
+            "nullable": true
+          },
+          "inheritedFrom": {
+            "type": "string",
+            "description": "The fleet whose grant applies when this fleet has none of its own.",
+            "nullable": true
+          },
+          "alwaysAllowed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What every app the hub installs may do without a grant."
+          }
+        },
+        "additionalProperties": false
+      },
       "ServiceAccountLimitsDto": {
         "type": "object",
         "properties": {
@@ -6171,6 +7207,22 @@
             "type": "boolean",
             "description": "For a catalog or platform app (OhrTech staff): the release fixes security vulnerabilities.",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetSdkAccessRequest": {
+        "required": [
+          "areas"
+        ],
+        "type": "object",
+        "properties": {
+          "areas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Areas from the settings catalogue's sdk.access options. Empty takes away what a parent fleet grants."
           }
         },
         "additionalProperties": false
@@ -6596,6 +7648,9 @@
       "name": "Apps"
     },
     {
+      "name": "Device SDK"
+    },
+    {
       "name": "Devices"
     },
     {
@@ -6603,6 +7658,9 @@
     },
     {
       "name": "Permissions"
+    },
+    {
+      "name": "Push"
     },
     {
       "name": "Remote ADB"

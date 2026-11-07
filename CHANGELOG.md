@@ -5,6 +5,10 @@
 - Push (.NET 10): `PushSealer` seals and signs a message for an app's push token, end to end, in the token's
   suite: `x25519` (small, the default) or `xwing-mldsa65` (post-quantum: X-Wing and ML-DSA-65).
   `PushSenderKey` makes and loads your signing keys; give the app their public keys.
+- Push API: `SendPushAsync` (up to 500 messages a call), `GetPushStatusAsync` and `ListPushTokensAsync`.
+- Device SDK: `VerifyKeyAttestationAsync` checks that a key an app made was made in that device's TEE, for
+  that app, bound to your challenge. `GetSdkAccessAsync`, `SetSdkAccessAsync` and `ClearSdkAccessAsync`
+  set which Device SDK areas a fleet's app may use; `ListDeviceEventsAsync` lists what apps did with them.
 
 ## 2.1.0
 
