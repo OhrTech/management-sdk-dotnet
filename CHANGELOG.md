@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Push (.NET 10): `PushSealer` seals and signs a message for an app's push token, end to end, in the token's
+  suite: `x25519` (small, the default) or `xwing-mldsa65` (post-quantum: X-Wing and ML-DSA-65).
+  `PushSenderKey` makes and loads your signing keys; give the app their public keys.
+
 ## 2.1.0
 
 - Privileged Android permissions by OhrTech approval: `ListAppPermissionsAsync` (each privileged permission an
