@@ -50,10 +50,10 @@ public static class OhrTechAttestation
     public const string VerifiedBootKeySha256 = "2beb1f5c24417c079046e60db3348bba47858b4990eeda2f5b88729507ff2ada";
 
     /// <summary>
-    /// Extended key usage of the certificate that signs the attestation status list ("OhrTech Attestation Status N").
-    /// A UUID OID (X.667).
+    /// Extended key usage of the certificate that signs the attestation status list ("OhrTech Attestation Status N"):
+    /// id-kp-OCSPSigning, the standard purpose for a certificate that signs revocation status.
     /// </summary>
-    public const string StatusSigningEku = "2.25.73147592544128211943638446974928104936";
+    public const string StatusSigningEku = "1.3.6.1.5.5.7.3.9";
 
     /// <summary>How a unit attestation key certificate names its device: URI urn:ohrtech:device:dev_….</summary>
     public const string DeviceUriPrefix = "urn:ohrtech:device:";
