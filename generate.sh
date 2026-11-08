@@ -54,6 +54,9 @@ edits = [
      "System.Text.Json.JsonSerializer.Deserialize(responseText, TypeInfo<T>())", 1),
     ("System.Text.Json.JsonSerializer.DeserializeAsync<T>(responseStream, JsonSerializerSettings, cancellationToken)",
      "System.Text.Json.JsonSerializer.DeserializeAsync(responseStream, TypeInfo<T>(), cancellationToken)", 1),
+    # A string response is text (a PEM, a JWS), not a JSON string.
+    ("var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);",
+     "var objectResponse_ = new ObjectResponseResult<string>(await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false), string.Empty);", 1),
     ("        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)",
      "#if NET5_0_OR_GREATER\n"
      "        [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage(\"Trimming\", \"IL2075\", Justification = \"No operation takes an enum parameter.\")]\n"

@@ -82,6 +82,31 @@ The API refuses an APK of another package than the app's, a version code that is
 different signing key. From a build pipeline, the [`ohr` command line](https://github.com/OhrTech/ohr-cli)
 does the same in one step.
 
+## Device attestation (.NET 10)
+
+Your app attests a key with the Device SDK (`sdk.attestation.attest(challenge)`) and sends the
+result once; your server checks it and keeps the key, then checks each request's token. Offline,
+against the OhrTech Attestation Root built into the SDK:
+
+```csharp
+using OhrTech.Management.Attestation;
+
+var status = await AttestationStatusList.FetchAsync(http);   // the revoked devices, signed; refresh a few times a day
+var verifier = new DeviceAttestationVerifier(new DeviceAttestationPolicy { PackageName = "com.example.pos", MinOsPatchLevel = 202610 });
+var result = verifier.Verify(attestationJson, challenge, status);
+if (!result.Accepted) return Forbid(result.Reason ?? string.Join("; ", result.Problems));
+Save(result.DeviceId, result.EcPublicKey, result.MlDsa65PublicKey);   // MlDsa65PublicKey: the post-quantum suite
+
+// Each request: the token the app made with sdk.attestation.token("https://api.example.com").
+var claims = AttestationToken.Verify(token, "https://api.example.com", ecPublicKey, mlDsa65PublicKey);
+```
+
+`Accepted` means the chain runs to the OhrTech root through a unit that names itself (`dev_…`), the
+key is in the TEE and bound to your challenge, the device isn't revoked, and the policy holds:
+verified boot, a locked bootloader, OhrTech's boot key, then your package, signer and patch level.
+Online, `VerifyAttestationAsync` checks the same and, for your own devices, names the fleet and the
+app as well. `RevokeDeviceAttestationAsync` revokes a lost or retired device's keys.
+
 ## Remote control in your web app
 
 ```csharp

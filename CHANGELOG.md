@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Device attestation (.NET 10, `OhrTech.Management.Attestation`): `DeviceAttestationVerifier` checks a Device SDK
+  attestation offline (the chain to the OhrTech Attestation Root, the device it names, the app, the boot state,
+  your challenge and a policy); `AttestationStatusList` fetches and checks the signed list of revoked devices;
+  `AttestationToken.Verify` checks an app's per-request token (ES256, or ES256 + ML-DSA-65).
+- Attestation API: `VerifyAttestationAsync`, `RevokeDeviceAttestationAsync`, `GetAttestationRootAsync` and
+  `GetAttestationStatusAsync` (text: the PEM, the JWS).
+- Managed app configuration: `GetAppConfigSchemaAsync`, and a fleet's or device's configuration of an app
+  (`Get…`, `Set…` and `Clear…AppConfigAsync`).
 - Push (.NET 10): `PushSealer` seals and signs a message for an app's push token, end to end, in the token's
   suite: `x25519` (small, the default) or `xwing-mldsa65` (post-quantum: X-Wing and ML-DSA-65).
   `PushSenderKey` makes and loads your signing keys; give the app their public keys.
