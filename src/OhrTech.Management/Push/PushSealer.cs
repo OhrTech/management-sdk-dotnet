@@ -9,7 +9,7 @@ using Org.BouncyCastle.Crypto.Signers;
 namespace OhrTech.Management.Push;
 
 /// <summary>
-/// The push suites. <see cref="X25519"/> is small (about 110 bytes added to a message) and the
+/// The push suites. <see cref="X25519"/> is small (about 175 bytes added to a message, plus its id) and the
 /// default; <see cref="XWingMlDsa65"/> is post-quantum (about 4.6 KB added): choose it for messages
 /// whose content must stay secret for years. A token has one suite; seal with that one.
 /// </summary>
