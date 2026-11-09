@@ -4206,6 +4206,297 @@
         }
       }
     },
+    "/v1/fleets/{fleetId}/apps/{appId}/response-timeout": {
+      "get": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "How long an app may stay unresponsive on a fleet's devices: its own, a parent fleet's, or Android's 5 s",
+        "operationId": "GetResponseTimeout",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTimeoutDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "Set how long an app may stay unresponsive before Android's ANR and the kiosk watchdog count it as hung",
+        "operationId": "SetResponseTimeout",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetResponseTimeoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTimeoutDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "Stop setting the app's response timeout on this fleet (a parent fleet's, or Android's, applies)",
+        "operationId": "ClearResponseTimeout",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTimeoutDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/devices/{deviceId}/usb-devices": {
       "get": {
         "tags": [
@@ -10184,6 +10475,38 @@
         },
         "additionalProperties": false
       },
+      "ResponseTimeoutDto": {
+        "required": [
+          "appId",
+          "fleetId"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "fleetId": {
+            "type": "string"
+          },
+          "seconds": {
+            "type": "integer",
+            "description": "What applies on the fleet: its own, or the nearest parent fleet's; null for Android's 5 s.",
+            "format": "int32",
+            "nullable": true
+          },
+          "own": {
+            "type": "integer",
+            "description": "This fleet's own; null when it inherits (InheritedFrom) or sets none.",
+            "format": "int32",
+            "nullable": true
+          },
+          "inheritedFrom": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "RevokeAttestationRequest": {
         "required": [
           "reason"
@@ -10497,6 +10820,20 @@
             "type": "boolean",
             "description": "For a catalog or platform app (OhrTech staff): the release fixes security vulnerabilities.",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetResponseTimeoutRequest": {
+        "required": [
+          "seconds"
+        ],
+        "type": "object",
+        "properties": {
+          "seconds": {
+            "type": "integer",
+            "description": "A whole number of seconds, 1 to 2147483 (Android's limit). Used as the app's input ANR time\n            (OhrTech OS builds that support one per app) and, for the kiosk app, the watchdog's heartbeat timeout.",
+            "format": "int32"
           }
         },
         "additionalProperties": false

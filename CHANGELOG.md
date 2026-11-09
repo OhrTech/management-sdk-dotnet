@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.3.0 (unreleased)
+
+- Per-app response timeouts: `GetResponseTimeoutAsync`, `SetResponseTimeoutAsync` and `ClearResponseTimeoutAsync`
+  (`/v1/fleets/{fleetId}/apps/{appId}/response-timeout`): how long an app's main thread may stay busy before it counts
+  as not responding, 1 to 2147483 seconds, inherited down the fleet tree. The app's ANR time on OhrTech OS 2026110901
+  and later, and the kiosk watchdog's heartbeat timeout for the kiosk app (OhrTech Agent 1062 or later).
+
 ## 2.2.0
 
 For the [Device SDK](https://docs.ohrtech.net/device-sdk/)'s server side.
