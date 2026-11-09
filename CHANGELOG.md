@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 2.2.0
+
+For the [Device SDK](https://docs.ohrtech.net/device-sdk/)'s server side.
 
 - Device attestation (.NET 10, `OhrTech.Management.Attestation`): `DeviceAttestationVerifier` checks a Device SDK
   attestation offline (the chain to the OhrTech Attestation Root, the device it names, the app, the boot state,
@@ -17,6 +19,17 @@
 - Device SDK: `VerifyKeyAttestationAsync` checks that a key an app made was made in that device's TEE, for
   that app, bound to your challenge. `GetSdkAccessAsync`, `SetSdkAccessAsync` and `ClearSdkAccessAsync`
   set which Device SDK areas a fleet's app may use; `ListDeviceEventsAsync` lists what apps did with them.
+- `VerifyAttestationRequest.SignerSha256`: the API checks the app's signing certificate too.
+- Crash reports and logs: `ListAppCrashesAsync`, `ListCrashReportsAsync`, `ListDeviceCrashesAsync`;
+  `RequestLogBundleAsync` and `ListLogBundlesAsync` (with an hour's download link).
+- Kiosk: `ExitKioskAsync` lifts kiosk mode on a device for some minutes without the exit PIN.
+- USB devices: `GetUsbDevicesAsync`, `SetUsbDevicesAsync`, `ClearUsbDevicesAsync` (pre-approved per fleet and
+  app) and `ListDevicePeripheralsAsync` (what is attached).
+- Certificates for apps: `CreateIssuingCaAsync`, `ListIssuingCasAsync`, `UploadIssuingCaCertificateAsync`,
+  `RevokeIssuingCaAsync`; `GetAppCertificatesAsync`, `SetAppCertificatesAsync`, `ClearAppCertificatesAsync`;
+  `ListDeviceCertificatesAsync`; `GetDeviceIdentityRootAsync`.
+- Attestation status certificates have the extended key usage id-kp-OCSPSigning
+  (`OhrTechAttestation.StatusSigningEku`).
 
 ## 2.1.0
 

@@ -2232,6 +2232,1084 @@
         }
       }
     },
+    "/v1/device-identity/root": {
+      "get": {
+        "tags": [
+          "Certificates for apps"
+        ],
+        "summary": "The OhrTech Device Identity Root, PEM: trust it to check any app certificate's device",
+        "operationId": "GetDeviceIdentityRoot",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/x-pem-file": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/orgs/{orgId}/issuing-cas": {
+      "post": {
+        "tags": [
+          "Certificates for apps"
+        ],
+        "summary": "Make an issuing CA for your apps' client certificates: OhrTech keeps its key; you get its CSR for your client root",
+        "operationId": "CreateIssuingCa",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "An organisation id (org_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIssuingCaRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssuingCaDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Certificates for apps"
+        ],
+        "summary": "Your organisation's issuing CAs",
+        "operationId": "ListIssuingCas",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "An organisation id (org_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IssuingCaDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{orgId}/issuing-cas/{issuingCaId}/org-certificate": {
+      "put": {
+        "tags": [
+          "Certificates for apps"
+        ],
+        "summary": "Upload the CA certificate your client root issued from the CSR, with its chain",
+        "operationId": "UploadIssuingCaCertificate",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "An organisation id (org_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "issuingCaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadOrgCertificateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssuingCaDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{orgId}/issuing-cas/{issuingCaId}/revoke": {
+      "post": {
+        "tags": [
+          "Certificates for apps"
+        ],
+        "summary": "Stop the issuing CA issuing (certificates already issued stay valid until they expire)",
+        "operationId": "RevokeIssuingCa",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "An organisation id (org_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "issuingCaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssuingCaDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleets/{fleetId}/apps/{appId}/certificates": {
+      "get": {
+        "tags": [
+          "Certificates for apps"
+        ],
+        "summary": "An app's certificates on a fleet: its issuing CA, private CAs and imported certificates",
+        "operationId": "GetAppCertificates",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppCertificatesDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Certificates for apps"
+        ],
+        "summary": "Give an app an issuing CA, private CAs to trust and imported client certificates (PKCS#12, sealed)",
+        "operationId": "SetAppCertificates",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetAppCertificatesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppCertificatesDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Certificates for apps"
+        ],
+        "summary": "Stop setting the app's certificates on this fleet (a parent fleet's apply)",
+        "operationId": "ClearAppCertificates",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppCertificatesDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/certificates": {
+      "get": {
+        "tags": [
+          "Certificates for apps"
+        ],
+        "summary": "The client certificates issued to the device's apps, newest first",
+        "operationId": "ListDeviceCertificates",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeviceCertificateDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/crashes": {
+      "get": {
+        "tags": [
+          "Crash reports"
+        ],
+        "summary": "An app's crashes, grouped: how often, on how many devices, in which versions, first and last seen",
+        "operationId": "ListAppCrashes",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "description": "How far back (1-90, default 30).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "versionCode",
+            "in": "query",
+            "description": "Only this version.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CrashGroupDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/crashes/{signature}": {
+      "get": {
+        "tags": [
+          "Crash reports"
+        ],
+        "summary": "The reports of one crash, newest first: device, version, stack and the app's last log lines",
+        "operationId": "ListCrashReports",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "signature",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "At most this many (1-100, default 20).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CrashReportDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/crashes": {
+      "get": {
+        "tags": [
+          "Crash reports"
+        ],
+        "summary": "The crashes of the hub's apps on one device, newest first",
+        "operationId": "ListDeviceCrashes",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "At most this many (1-100, default 20).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CrashReportDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/attestations/verify": {
       "post": {
         "tags": [
@@ -2318,7 +3396,7 @@
         "tags": [
           "Device attestation"
         ],
-        "summary": "Stop vouching for a device's attestation keys (lost, retired or compromised): its chains then fail",
+        "summary": "Stop vouching for a device (lost, retired or compromised): its attestation chains fail, and it gets no new attestation keys",
         "operationId": "RevokeDeviceAttestation",
         "parameters": [
           {
@@ -2830,6 +3908,381 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/KeyAttestationVerdictDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleets/{fleetId}/apps/{appId}/usb-devices": {
+      "get": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "The USB devices an app may use without asking on a fleet's devices: its own, or a parent fleet's",
+        "operationId": "GetUsbDevices",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsbDevicesDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "Pre-approve USB devices (vendor and product id, optionally serial) and accessories (manufacturer and model) for an app",
+        "operationId": "SetUsbDevices",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetUsbDevicesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsbDevicesDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "Stop setting the app's USB devices on this fleet (a parent fleet's apply)",
+        "operationId": "ClearUsbDevices",
+        "parameters": [
+          {
+            "name": "fleetId",
+            "in": "path",
+            "description": "A fleet id (flt_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^flt_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "flt_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsbDevicesDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/usb-devices": {
+      "get": {
+        "tags": [
+          "Device SDK"
+        ],
+        "summary": "The USB devices and accessories attached to the device, as it last reported, and which apps they're approved for",
+        "operationId": "ListDevicePeripherals",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PeripheralsDto"
                 }
               }
             }
@@ -3537,6 +4990,206 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CheckInDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/apps/{appId}/log-bundles": {
+      "post": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "summary": "Ask the device for one app's logs: its logcat, what it logged through the Device SDK, its recent events (a LogBundle task)",
+        "operationId": "RequestLogBundle",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestLogBundleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogBundleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/log-bundles": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "summary": "The device's log bundles, newest first, with a download link for each one uploaded",
+        "operationId": "ListLogBundles",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "At most this many (1-50, default 20).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LogBundleDto"
+                  }
                 }
               }
             }
@@ -6118,6 +7771,100 @@
         }
       }
     },
+    "/v1/devices/{deviceId}/kiosk/exit": {
+      "post": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Lift kiosk mode on the device for some minutes, without the exit PIN, or end that early (a KioskExit task)",
+        "operationId": "ExitKiosk",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExitKioskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/devices/{deviceId}/shell": {
       "post": {
         "tags": [
@@ -6308,6 +8055,28 @@
           },
           "outdated": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AppCertificatesDto": {
+        "required": [
+          "appId",
+          "fleetId"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "fleetId": {
+            "type": "string"
+          },
+          "own": {},
+          "applies": {},
+          "inheritedFrom": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -6844,6 +8613,132 @@
         },
         "additionalProperties": false
       },
+      "CrashGroupDto": {
+        "required": [
+          "count",
+          "devices",
+          "firstSeen",
+          "kind",
+          "lastSeen",
+          "signature",
+          "title",
+          "versionCodes"
+        ],
+        "type": "object",
+        "properties": {
+          "signature": {
+            "type": "string",
+            "description": "What groups the same crash (16 hex): pass it to ListCrashReports."
+          },
+          "kind": {
+            "type": "string",
+            "description": "crash, native_crash or anr."
+          },
+          "title": {
+            "type": "string",
+            "description": "The exception, signal or ANR and where."
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "devices": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "versionCodes": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "The app versions it happened in, newest first."
+          },
+          "firstSeen": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastSeen": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CrashReportDto": {
+        "required": [
+          "appId",
+          "deviceId",
+          "kind",
+          "occurredAt",
+          "packageName",
+          "receivedAt",
+          "report",
+          "signature",
+          "title",
+          "versionHubShipped"
+        ],
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          },
+          "appId": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "versionCode": {
+            "type": "integer",
+            "description": "The installed version's code; VersionHubShipped false when the APK wasn't the one the hub shipped.",
+            "format": "int64",
+            "nullable": true
+          },
+          "versionHubShipped": {
+            "type": "boolean"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "receivedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "process": {
+            "type": "string",
+            "nullable": true
+          },
+          "foreground": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "osBuild": {
+            "type": "string",
+            "nullable": true
+          },
+          "report": {
+            "type": "string",
+            "description": "The stack (Java), the backtrace (native) or the main thread (ANR), trimmed."
+          },
+          "log": {
+            "type": "string",
+            "description": "The app's last log lines before it.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateAppRequest": {
         "required": [
           "name",
@@ -6870,6 +8765,23 @@
         },
         "additionalProperties": false
       },
+      "CreateIssuingCaRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "leafDays": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateTaskRequest": {
         "required": [
           "taskClass"
@@ -6885,6 +8797,57 @@
               "type": "string"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeviceCertificateDto": {
+        "required": [
+          "alias",
+          "appId",
+          "certificateId",
+          "certificatePem",
+          "issuingCaId",
+          "notAfter",
+          "notBefore",
+          "serial"
+        ],
+        "type": "object",
+        "properties": {
+          "certificateId": {
+            "type": "string"
+          },
+          "appId": {
+            "type": "string"
+          },
+          "alias": {
+            "type": "string"
+          },
+          "serial": {
+            "type": "string"
+          },
+          "notBefore": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notAfter": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "revokeReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "issuingCaId": {
+            "type": "string"
+          },
+          "certificatePem": {
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -7276,6 +9239,20 @@
         },
         "additionalProperties": false
       },
+      "ExitKioskRequest": {
+        "required": [
+          "minutes"
+        ],
+        "type": "object",
+        "properties": {
+          "minutes": {
+            "type": "integer",
+            "description": "1 to 240: how long kiosk mode is lifted (it also ends when the screen turns off). 0: back to\n            kiosk mode now.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "FleetDto": {
         "required": [
           "deviceCount",
@@ -7344,6 +9321,73 @@
         },
         "additionalProperties": {}
       },
+      "IssuingCaDto": {
+        "required": [
+          "createdAt",
+          "issued",
+          "issuingCaId",
+          "leafDays",
+          "name",
+          "ohrTechCertificatePem",
+          "ohrTechChainPem",
+          "orgId",
+          "subject"
+        ],
+        "type": "object",
+        "properties": {
+          "issuingCaId": {
+            "type": "string"
+          },
+          "orgId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "leafDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "csrPem": {
+            "type": "string",
+            "description": "Sign it with your client root (a CA certificate for the same subject and key) and upload the result.",
+            "nullable": true
+          },
+          "ohrTechCertificatePem": {
+            "type": "string",
+            "description": "OhrTech's certificate for it, and OhrTechChainPem up to the OhrTech Device Identity Root."
+          },
+          "ohrTechChainPem": {
+            "type": "string"
+          },
+          "orgCertificatePem": {
+            "type": "string",
+            "description": "Your root's certificate for it, once uploaded.",
+            "nullable": true
+          },
+          "orgChainPem": {
+            "type": "string",
+            "nullable": true
+          },
+          "issued": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "KeyAttestationDto": {
         "required": [
           "alg",
@@ -7401,6 +9445,65 @@
         },
         "additionalProperties": false,
         "description": "Whether the key was made in this device's TEE for that app, bound to that challenge.\nReason says why not; AppId and PackageName are the app it belongs to."
+      },
+      "LogBundleDto": {
+        "required": [
+          "deviceId",
+          "requestedAt",
+          "status",
+          "taskId"
+        ],
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string"
+          },
+          "deviceId": {
+            "type": "string"
+          },
+          "appId": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "pending, running, success or failed (the task's)."
+          },
+          "requestedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "bytes": {
+            "type": "integer",
+            "description": "The zip's size, once uploaded.",
+            "format": "int64",
+            "nullable": true
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "downloadUrl": {
+            "type": "string",
+            "description": "Where to download the zip, for an hour (DownloadExpiresAt); null until it is uploaded.",
+            "nullable": true
+          },
+          "downloadExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "requestedBy": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "ManagedAppDto": {
         "required": [
@@ -7669,6 +9772,27 @@
             "type": "string",
             "description": "The Android security patch level the device runs (YYYY-MM-DD), as last reported. Null until the device reports it.",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PeripheralsDto": {
+        "required": [
+          "attached",
+          "deviceId"
+        ],
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          },
+          "reportedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "attached": {
+            "description": "As the device reported it: {\"vendorId\", \"productId\", \"manufacturer\", \"product\", \"serial\", \"approvedFor\": [package]}\n            for devices, {\"accessory\": true, \"manufacturer\", \"model\", ...} for accessories."
           }
         },
         "additionalProperties": false
@@ -8047,6 +10171,19 @@
         },
         "additionalProperties": false
       },
+      "RequestLogBundleRequest": {
+        "required": [
+          "allowMobileData"
+        ],
+        "type": "object",
+        "properties": {
+          "allowMobileData": {
+            "type": "boolean",
+            "description": "Upload on mobile data too; otherwise the device waits for Wi-Fi (up to a day)."
+          }
+        },
+        "additionalProperties": false
+      },
       "RevokeAttestationRequest": {
         "required": [
           "reason"
@@ -8282,6 +10419,31 @@
         },
         "additionalProperties": false
       },
+      "SetAppCertificatesRequest": {
+        "type": "object",
+        "properties": {
+          "issuingCaId": {
+            "type": "string",
+            "description": "The organisation's issuing CA for the app's device-made keys; null: none.",
+            "nullable": true
+          },
+          "trust": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Private CAs (PEM) the app trusts besides the system's.",
+            "nullable": true
+          },
+          "imported": {
+            "type": "array",
+            "items": {},
+            "description": "Client certificates from your PKI: {\"alias\", \"pkcs12\" (base64), \"password\"}; \"*\" keeps a stored one.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "SetAppConfigRequest": {
         "type": "object",
         "properties": {
@@ -8351,6 +10513,20 @@
               "type": "string"
             },
             "description": "Areas from the settings catalogue's sdk.access options. Empty takes away what a parent fleet grants."
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetUsbDevicesRequest": {
+        "required": [
+          "devices"
+        ],
+        "type": "object",
+        "properties": {
+          "devices": {
+            "type": "array",
+            "items": {},
+            "description": "Each {\"vendorId\", \"productId\", \"serial\"?, \"name\"?} (ids 0-65535 or hex \"0x05e0\") or {\"manufacturer\", \"model\", \"name\"?}.\n            Empty takes away what a parent fleet approves."
           }
         },
         "additionalProperties": false
@@ -8726,6 +10902,56 @@
         },
         "additionalProperties": false
       },
+      "UploadOrgCertificateRequest": {
+        "required": [
+          "certificatePem",
+          "chainPem"
+        ],
+        "type": "object",
+        "properties": {
+          "certificatePem": {
+            "type": "string",
+            "description": "The CA certificate your client root issued from the CSR."
+          },
+          "chainPem": {
+            "type": "string",
+            "description": "Its issuers up to and including your self-signed root."
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsbDevicesDto": {
+        "required": [
+          "appId",
+          "devices",
+          "fleetId"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "fleetId": {
+            "type": "string"
+          },
+          "devices": {
+            "type": "array",
+            "items": {},
+            "description": "What applies on the fleet: its own entries, or the nearest parent fleet's."
+          },
+          "own": {
+            "type": "array",
+            "items": {},
+            "description": "This fleet's own entries; null when it inherits (InheritedFrom).",
+            "nullable": true
+          },
+          "inheritedFrom": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "VerifyAttestationRequest": {
         "required": [
           "challenge",
@@ -8755,6 +10981,11 @@
           "package": {
             "type": "string",
             "description": "The package the key must belong to, if the server wants it checked.",
+            "nullable": true
+          },
+          "signerSha256": {
+            "type": "string",
+            "description": "The SHA-256 of the app's signing certificate (hex), if the server wants it checked: a\n            Problem unless one of the app's signers matches. Without it, compare `signerSha256` in the answer yourself.",
             "nullable": true
           }
         },
@@ -8813,6 +11044,12 @@
       "name": "Apps"
     },
     {
+      "name": "Certificates for apps"
+    },
+    {
+      "name": "Crash reports"
+    },
+    {
       "name": "Device attestation"
     },
     {
@@ -8820,6 +11057,9 @@
     },
     {
       "name": "Devices"
+    },
+    {
+      "name": "Diagnostics"
     },
     {
       "name": "Fleets"
