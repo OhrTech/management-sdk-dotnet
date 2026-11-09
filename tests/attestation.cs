@@ -14,7 +14,7 @@ if (args.Length < 1) throw new ArgumentException("usage: dotnet run tests/attest
 using var doc = JsonDocument.Parse(File.ReadAllText(args[0]));
 var v = doc.RootElement;
 var challenge = Encoding.UTF8.GetBytes(v.GetProperty("challenge").GetString()!);
-var package = "net.ohrtech.sdkprobe";
+var package = v.GetProperty("session").GetProperty("package").GetString()!;  // the app that made it
 var verifier = new DeviceAttestationVerifier(new DeviceAttestationPolicy { PackageName = package, MinOsPatchLevel = 202610 });
 
 var ec = verifier.Verify(v.GetProperty("ec").GetRawText(), challenge);
