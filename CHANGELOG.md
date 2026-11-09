@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.0 (unreleased)
+## 2.3.0
 
 - Per-app response timeouts: `GetResponseTimeoutAsync`, `SetResponseTimeoutAsync` and `ClearResponseTimeoutAsync`
   (`/v1/fleets/{fleetId}/apps/{appId}/response-timeout`): how long an app's main thread may stay busy before it counts
