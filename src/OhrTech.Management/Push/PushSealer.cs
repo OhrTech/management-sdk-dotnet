@@ -127,6 +127,17 @@ public static class PushSealer
         return e.ToArray();
     }
 
+    /// <summary>
+    /// <see cref="Seal"/> for a web app's push subscription (<see cref="WebPushSubscription"/>): the page's
+    /// <c>PushSubscription.toJSON()</c>, as your server kept it. Base64: send it as <c>message</c>, with the
+    /// subscription (or its token).
+    /// </summary>
+    public static string SealForSubscription(string subscriptionJson, PushSenderKey sender, string id, DateTimeOffset expires, byte[] data)
+    {
+        var s = WebPushSubscription.Parse(subscriptionJson);
+        return SealBase64(s.Token, s.Suite, s.PublicKey, sender, id, expires, data);
+    }
+
     /// <summary><see cref="Seal"/>, base64: what <c>message</c> takes.</summary>
     public static string SealBase64(string token, string suite, byte[] recipientPublicKey, PushSenderKey sender, string id,
         DateTimeOffset expires, byte[] data) =>

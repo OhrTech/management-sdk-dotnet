@@ -8249,6 +8249,607 @@
           }
         }
       }
+    },
+    "/v1/web-apps/preview": {
+      "post": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "What a site's Web App Manifest gives (name, icons, scope, display), before you make the web app",
+        "operationId": "PreviewWebApp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewWebAppRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{orgId}/web-apps": {
+      "post": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "Make a website an app on your devices, from its manifest or from fields",
+        "operationId": "CreateWebApp",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "An organisation id (org_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebAppRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebAppDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/web": {
+      "get": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "A web app's site, display and mode",
+        "operationId": "GetWebApp",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebAppDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "Change a web app's mode, display or scope rule",
+        "operationId": "UpdateWebApp",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWebAppRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebAppDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/web/manifest-changes": {
+      "get": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "Compare the site's manifest now with the web app: a changed name or icon waits for your approval",
+        "operationId": "GetWebAppManifestChanges",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebAppChangesDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/web/manifest-changes/approve": {
+      "post": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "Take the manifest's new name and icon: the next APK carries them",
+        "operationId": "ApproveWebAppManifestChanges",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebAppDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{orgId}/web-signing-key": {
+      "get": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "Your organisation's web app signing certificate, for a site's assetlinks.json (passkeys)",
+        "operationId": "GetWebSigningKey",
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "description": "An organisation id (org_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^org_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "org_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebSigningKeyDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -9092,6 +9693,57 @@
         },
         "additionalProperties": false
       },
+      "CreateWebAppRequest": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The site: its manifest's URL, or a page that links it (<link rel=\"manifest\">). With it, leave out\n            title, startUrl and scope: the manifest gives them.",
+            "nullable": true
+          },
+          "manifestId": {
+            "type": "string",
+            "description": "The manifest's id, which must match (as navigator.install() checks); optional.",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "description": "For a site without a manifest: the app's name, 1 to 100 characters.",
+            "nullable": true
+          },
+          "startUrl": {
+            "type": "string",
+            "description": "For a site without a manifest: where it opens (https).",
+            "nullable": true
+          },
+          "scope": {
+            "type": "string",
+            "description": "For a site without a manifest: the URL prefix that is the app; default the start URL's directory.",
+            "nullable": true
+          },
+          "iconPng": {
+            "type": "string",
+            "description": "A square PNG of at least 144 pixels, base64: needed without a manifest, or to replace its icon.",
+            "nullable": true
+          },
+          "displayMode": {
+            "type": "string",
+            "description": "MINIMAL_UI (back, forward and the page title), STANDALONE or FULL_SCREEN; default the manifest's.",
+            "nullable": true
+          },
+          "mode": {
+            "type": "string",
+            "description": "locked (the default): the site as it is. sdk: the site may use the Device SDK on its own origins.",
+            "nullable": true
+          },
+          "ignoreManifestScope": {
+            "type": "boolean",
+            "description": "Let the admin's URL filters alone decide what is the app, not the manifest's scope.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "DeviceCertificateDto": {
         "required": [
           "alias",
@@ -9771,7 +10423,7 @@
           },
           "bytes": {
             "type": "integer",
-            "description": "The zip's size, once uploaded.",
+            "description": "The zip's size, once uploaded, as the hub measured it in storage.",
             "format": "int64",
             "nullable": true
           },
@@ -10148,6 +10800,23 @@
         "additionalProperties": false,
         "description": "For PATCH: a key set to null stops overriding it on this device."
       },
+      "PreviewWebAppRequest": {
+        "required": [
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The site's manifest URL, or a page that links it."
+          },
+          "manifestId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ProblemDetails": {
         "type": "object",
         "properties": {
@@ -10192,14 +10861,14 @@
       },
       "PushRequestMessage": {
         "required": [
-          "message",
-          "token"
+          "message"
         ],
         "type": "object",
         "properties": {
           "token": {
             "type": "string",
-            "description": "The app's push token (psh_\u2026)."
+            "description": "The app's push token (psh_\u2026). Or give Subscription instead.",
+            "nullable": true
           },
           "message": {
             "type": "string",
@@ -10219,6 +10888,12 @@
           "collapseKey": {
             "type": "string",
             "description": "A message still on its way with the same token and key is replaced.",
+            "nullable": true
+          },
+          "subscription": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "A web app's push subscription, as its page's PushSubscription.toJSON() gave it (the\n            token is its endpoint's last part): instead of Token.",
             "nullable": true
           }
         },
@@ -11239,6 +11914,25 @@
         },
         "additionalProperties": false
       },
+      "UpdateWebAppRequest": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "description": "locked or sdk; null leaves it. Mode, display and the scope rule are the app's managed\n            configuration (keys mode, displayMode, ignoreManifestScope): a fleet or a device can set its own, and a change\n            reaches devices at once, with no new version.",
+            "nullable": true
+          },
+          "displayMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "ignoreManifestScope": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "UploadOrgCertificateRequest": {
         "required": [
           "certificatePem",
@@ -11358,6 +12052,178 @@
           }
         },
         "additionalProperties": false
+      },
+      "WebAppChangesDto": {
+        "required": [
+          "appId"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "description": "The manifest's new name; null: unchanged. Likewise the others.",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "iconPng": {
+            "type": "string",
+            "nullable": true
+          },
+          "iconMaskablePng": {
+            "type": "string",
+            "nullable": true
+          },
+          "error": {
+            "type": "string",
+            "description": "Why the manifest couldn't be read now (nothing changes then).",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WebAppDto": {
+        "required": [
+          "appId",
+          "createdAt",
+          "displayMode",
+          "iconPng",
+          "ignoreManifestScope",
+          "manifestId",
+          "maskableIcon",
+          "mode",
+          "orgId",
+          "packageName",
+          "scope",
+          "scopeExtensions",
+          "signingCertificateSha256",
+          "startUrl",
+          "title",
+          "versionCode"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "orgId": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "The app's name on the device (the app's name)."
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "startUrl": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "scopeExtensions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Other origins that are part of the app: the manifest's scope_extensions that confirmed it\n            (/.well-known/web-app-origin-association)."
+          },
+          "manifestUrl": {
+            "type": "string",
+            "description": "Null for a web app made from fields.",
+            "nullable": true
+          },
+          "manifestId": {
+            "type": "string"
+          },
+          "displayMode": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "ignoreManifestScope": {
+            "type": "boolean"
+          },
+          "themeColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "backgroundColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "iconPng": {
+            "type": "string",
+            "description": "The launcher icon, base64 PNG."
+          },
+          "maskableIcon": {
+            "type": "boolean"
+          },
+          "shortcuts": {},
+          "shareTarget": {},
+          "versionCode": {
+            "type": "integer",
+            "description": "The web app's version: every change the APK must carry (name, icon) raises it.",
+            "format": "int32"
+          },
+          "builtVersionCode": {
+            "type": "integer",
+            "description": "The version the newest APK was built from; null until the first build.",
+            "format": "int32",
+            "nullable": true
+          },
+          "manifestCheckedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "signingCertificateSha256": {
+            "type": "string",
+            "description": "Your organisation's web app signing certificate, as assetlinks.json names it."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "buildError": {
+            "type": "string",
+            "description": "Why the last build of the current version failed; null when it didn't.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WebSigningKeyDto": {
+        "required": [
+          "certificatePem",
+          "certificateSha256",
+          "orgId"
+        ],
+        "type": "object",
+        "properties": {
+          "orgId": {
+            "type": "string"
+          },
+          "certificatePem": {
+            "type": "string"
+          },
+          "certificateSha256": {
+            "type": "string",
+            "description": "The certificate's SHA-256, AA:BB:\u2026, as assetlinks.json's sha256_cert_fingerprints takes it."
+          }
+        },
+        "additionalProperties": false
       }
     },
     "securitySchemes": {
@@ -11421,6 +12287,9 @@
     },
     {
       "name": "Tasks"
+    },
+    {
+      "name": "Web apps"
     }
   ]
 }
