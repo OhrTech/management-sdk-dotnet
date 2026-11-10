@@ -112,6 +112,9 @@ namespace OhrTech.Management
     [System.Text.Json.Serialization.JsonSerializable(typeof(WaitingVersionDto))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(WebAppChangesDto))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(WebAppDto))]
+    [System.Text.Json.Serialization.JsonSerializable(typeof(WebAppVersionDto))]
+    [System.Text.Json.Serialization.JsonSerializable(typeof(WebAppVersionsDto))]
+    [System.Text.Json.Serialization.JsonSerializable(typeof(WebBundleDto))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(WebSigningKeyDto))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(SettingMode))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<AdbSessionDto>))]
@@ -133,6 +136,7 @@ namespace OhrTech.Management
     [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<RemoteControlSessionDto>))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<SettingDefinitionDto>))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<TaskDto>))]
+    [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<WebBundleDto>))]
     public partial class OhrManagementJsonContext : System.Text.Json.Serialization.JsonSerializerContext
     {
     }

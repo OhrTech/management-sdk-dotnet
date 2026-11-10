@@ -8850,6 +8850,363 @@
           }
         }
       }
+    },
+    "/v1/apps/{appId}/web/bundles": {
+      "post": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "Upload a Signed Web Bundle for a packaged web app: the hub checks it and offers it in the app's update manifest",
+        "operationId": "UploadWebBundle",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "channels",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The Signed Web Bundle (.swbn).",
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebBundleDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "A packaged web app's uploaded bundles",
+        "operationId": "ListWebBundles",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WebBundleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/web/bundles/{version}": {
+      "delete": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "Take an uploaded version out of the app's update manifest",
+        "operationId": "DeleteWebBundle",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/web/versions": {
+      "get": {
+        "tags": [
+          "Web apps"
+        ],
+        "summary": "What the update manifest the devices follow offers now",
+        "operationId": "GetWebAppVersions",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "description": "An app id (app_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^app_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "app_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebAppVersionsDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -11929,6 +12286,34 @@
           "ignoreManifestScope": {
             "type": "boolean",
             "nullable": true
+          },
+          "webBundleIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Mode packaged: the Web Bundle IDs the app trusts (up to 8); [] clears. The first upload pins its\n            bundle's ID when none is set.",
+            "nullable": true
+          },
+          "updateManifestUrl": {
+            "type": "string",
+            "description": "Mode packaged: the site's own update manifest (IWA's format); \"\" clears it (with uploads,\n            the devices then follow the hub's).",
+            "nullable": true
+          },
+          "updateChannel": {
+            "type": "string",
+            "description": "The update manifest's channel to follow (\"default\").",
+            "nullable": true
+          },
+          "pinnedVersion": {
+            "type": "string",
+            "description": "Exactly this version; \"\" clears.",
+            "nullable": true
+          },
+          "allowDowngrades": {
+            "type": "boolean",
+            "description": "An older version may replace a newer one (pinned, or the newest offered).",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -12089,6 +12474,7 @@
       },
       "WebAppDto": {
         "required": [
+          "allowDowngrades",
           "appId",
           "createdAt",
           "displayMode",
@@ -12104,7 +12490,9 @@
           "signingCertificateSha256",
           "startUrl",
           "title",
-          "versionCode"
+          "updateChannel",
+          "versionCode",
+          "webBundleIds"
         ],
         "type": "object",
         "properties": {
@@ -12200,6 +12588,124 @@
             "type": "string",
             "description": "Why the last build of the current version failed; null when it didn't.",
             "nullable": true
+          },
+          "webBundleIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "updateManifestUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "effectiveUpdateManifestUrl": {
+            "type": "string",
+            "description": "The update manifest devices follow: UpdateManifestUrl, or the hub's for uploaded bundles.",
+            "nullable": true
+          },
+          "updateChannel": {
+            "type": "string"
+          },
+          "pinnedVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "allowDowngrades": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WebAppVersionDto": {
+        "required": [
+          "channels",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "WebAppVersionsDto": {
+        "required": [
+          "appId",
+          "versions"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "updateManifestUrl": {
+            "type": "string",
+            "description": "The update manifest the devices follow, or null.",
+            "nullable": true
+          },
+          "versions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WebAppVersionDto"
+            },
+            "description": "What it offers: version, channels."
+          },
+          "error": {
+            "type": "string",
+            "description": "Why it couldn't be read now.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WebBundleDto": {
+        "required": [
+          "appId",
+          "bundleId",
+          "channels",
+          "createdAt",
+          "sha256",
+          "size",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "description": "The version its manifest (/.well-known/manifest.webmanifest) gives."
+          },
+          "bundleId": {
+            "type": "string",
+            "description": "Its Web Bundle ID."
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The update manifest channels it is on."
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
