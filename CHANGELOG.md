@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.4.0 (unreleased)
+
+- Web apps: an existing website as an app on your devices. `CreateWebAppAsync` (from the site's manifest, or from
+  fields), `PreviewWebAppAsync`, `GetWebAppAsync`, `UpdateWebAppAsync` (mode `locked`, `sdk` or `packaged`, display,
+  scope rule, and for packaged web apps the Signed Web Bundle policy: trusted IDs, update manifest, channel, pinned
+  version, downgrades), `GetWebAppManifestChangesAsync` and `ApproveWebAppManifestChangesAsync`, `GetWebSigningKeyAsync`.
+- Packaged web apps: `UploadWebBundleAsync`, `ListWebBundlesAsync`, `DeleteWebBundleAsync`, `GetWebAppVersionsAsync`.
+- Web push (.NET 10): `WebPushSubscription` reads a web app's `PushSubscription` JSON, `PushSealer.SealForSubscription`
+  seals and signs a message for it, and `DeclarativeWebPush.Create` makes a notification the web app shows with no
+  script. `PushRequestMessage.Subscription` sends to the subscription instead of a token.
+
 ## 2.3.0
 
 - Per-app response timeouts: `GetResponseTimeoutAsync`, `SetResponseTimeoutAsync` and `ClearResponseTimeoutAsync`
