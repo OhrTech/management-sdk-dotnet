@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.0 (unreleased)
+## 2.4.0 (2026-11-10)
 
 - Web apps: an existing website as an app on your devices. `CreateWebAppAsync` (from the site's manifest, or from
   fields), `PreviewWebAppAsync`, `GetWebAppAsync`, `UpdateWebAppAsync` (mode `locked`, `sdk` or `packaged`, display,
