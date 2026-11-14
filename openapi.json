@@ -9207,6 +9207,275 @@
           }
         }
       }
+    },
+    "/v1/devices/{deviceId}/wipe": {
+      "post": {
+        "tags": [
+          "Wipe"
+        ],
+        "summary": "The device acknowledges the wipe, then erases its data and apps, and restarts. Its operating system stays, and so\ndoes its place in your organisation: it enrols again by itself and gets its fleet's apps and settings back, once\nit has a network. Its Wi-Fi networks are erased too, so a device that reaches the internet only over Wi-Fi stays\noffline until someone joins it to a network. An offline device gets the wipe when it next connects, before\nanything else, until expiresInHours.",
+        "operationId": "WipeDevice",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WipeDeviceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WipeDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/wipes": {
+      "get": {
+        "tags": [
+          "Wipe"
+        ],
+        "summary": "The device's wipes, newest first",
+        "operationId": "ListWipes",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WipeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{deviceId}/wipes/{wipeId}": {
+      "delete": {
+        "tags": [
+          "Wipe"
+        ],
+        "summary": "Cancel a wipe the device has not received yet",
+        "operationId": "CancelWipe",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "description": "A device id (dev_\u2026).",
+            "required": true,
+            "schema": {
+              "pattern": "^dev_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "dev_01jftb4z0y9nn9yesabj71tyt0"
+          },
+          {
+            "name": "wipeId",
+            "in": "path",
+            "description": "A wipe's id: the id of the task that carries it (tsk_\u2026), as WipeDevice and ListWipes give it.",
+            "required": true,
+            "schema": {
+              "pattern": "^tsk_[0-7][0-9a-hjkmnp-tv-z]{25}$",
+              "type": "string"
+            },
+            "example": "tsk_01jftb4z0y9nn9yesabj71tyt0"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -12730,6 +12999,93 @@
           }
         },
         "additionalProperties": false
+      },
+      "WipeDeviceRequest": {
+        "required": [
+          "confirm"
+        ],
+        "type": "object",
+        "properties": {
+          "confirm": {
+            "type": "string",
+            "description": "The device's id (dev_\u2026) or IMEI, to confirm which device you mean."
+          },
+          "expiresInHours": {
+            "type": "integer",
+            "description": "How long the wipe waits for a device that is offline: 1 to 168 hours (default 24). Then it expires instead of running.",
+            "format": "int32",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "description": "Why, for your records (at most 500 characters).",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WipeDto": {
+        "required": [
+          "deviceId",
+          "expiresAt",
+          "requestedAt",
+          "requestedBy",
+          "status",
+          "wipeId"
+        ],
+        "type": "object",
+        "properties": {
+          "wipeId": {
+            "type": "string",
+            "description": "The wipe's id: the id of the task that carries it (tsk_\u2026)."
+          },
+          "deviceId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "description": "pending (waiting for the device), wiping (the device acknowledged it and is erasing itself), done (the device enrolled again after it), cancelled, expired or failed."
+          },
+          "requestedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "requestedBy": {
+            "type": "string",
+            "description": "Who asked: a person's email, or service:<name>."
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "expiresAt": {
+            "type": "string",
+            "description": "When a pending wipe stops waiting for the device.",
+            "format": "date-time"
+          },
+          "acknowledgedAt": {
+            "type": "string",
+            "description": "When the device acknowledged it, just before erasing itself.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "finishedAt": {
+            "type": "string",
+            "description": "When it became done, cancelled, expired or failed.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cancelledBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "description": "More about how it ended, when there is more to say.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       }
     },
     "securitySchemes": {
@@ -12796,6 +13152,9 @@
     },
     {
       "name": "Web apps"
+    },
+    {
+      "name": "Wipe"
     }
   ]
 }

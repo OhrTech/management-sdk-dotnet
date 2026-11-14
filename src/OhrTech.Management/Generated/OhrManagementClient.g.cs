@@ -1008,6 +1008,38 @@ namespace OhrTech.Management
         /// <exception cref="OhrApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<WebAppVersionsDto> GetWebAppVersionsAsync(string appId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// The device acknowledges the wipe, then erases its data and apps, and restarts. Its operating system stays, and so
+        /// <br/>does its place in your organisation: it enrols again by itself and gets its fleet's apps and settings back, once
+        /// <br/>it has a network. Its Wi-Fi networks are erased too, so a device that reaches the internet only over Wi-Fi stays
+        /// <br/>offline until someone joins it to a network. An offline device gets the wipe when it next connects, before
+        /// <br/>anything else, until expiresInHours.
+        /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
+        /// <returns>Created</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<WipeDto> WipeDeviceAsync(string deviceId, WipeDeviceRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// The device's wipes, newest first
+        /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.List<WipeDto>> ListWipesAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Cancel a wipe the device has not received yet
+        /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
+        /// <param name="wipeId">A wipe's id: the id of the task that carries it (tsk_…), as WipeDevice and ListWipes give it.</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task CancelWipeAsync(string deviceId, string wipeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -14819,6 +14851,406 @@ namespace OhrTech.Management
             }
         }
 
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// The device acknowledges the wipe, then erases its data and apps, and restarts. Its operating system stays, and so
+        /// <br/>does its place in your organisation: it enrols again by itself and gets its fleet's apps and settings back, once
+        /// <br/>it has a network. Its Wi-Fi networks are erased too, so a device that reaches the internet only over Wi-Fi stays
+        /// <br/>offline until someone joins it to a network. An offline device gets the wipe when it next connects, before
+        /// <br/>anything else, until expiresInHours.
+        /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
+        /// <returns>Created</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<WipeDto> WipeDeviceAsync(string deviceId, WipeDeviceRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (deviceId == null)
+                throw new System.ArgumentNullException("deviceId");
+
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = SerializeBody(body);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/devices/{deviceId}/wipe"
+                    urlBuilder_.Append("v1/devices/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(deviceId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/wipe");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<WipeDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// The device's wipes, newest first
+        /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
+        /// <returns>OK</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<WipeDto>> ListWipesAsync(string deviceId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (deviceId == null)
+                throw new System.ArgumentNullException("deviceId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/devices/{deviceId}/wipes"
+                    urlBuilder_.Append("v1/devices/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(deviceId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/wipes");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.List<WipeDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Cancel a wipe the device has not received yet
+        /// </summary>
+        /// <param name="deviceId">A device id (dev_…).</param>
+        /// <param name="wipeId">A wipe's id: the id of the task that carries it (tsk_…), as WipeDevice and ListWipes give it.</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="OhrApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task CancelWipeAsync(string deviceId, string wipeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (deviceId == null)
+                throw new System.ArgumentNullException("deviceId");
+
+            if (wipeId == null)
+                throw new System.ArgumentNullException("wipeId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "v1/devices/{deviceId}/wipes/{wipeId}"
+                    urlBuilder_.Append("v1/devices/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(deviceId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("/wipes/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(wipeId, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new OhrApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new OhrApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new OhrApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
         protected struct ObjectResponseResult<T>
         {
             public ObjectResponseResult(T responseObject, string responseText)
@@ -17902,6 +18334,90 @@ namespace OhrTech.Management
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("certificateSha256")]
         public string CertificateSha256 { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class WipeDeviceRequest
+    {
+
+        /// <summary>
+        /// The device's id (dev_…) or IMEI, to confirm which device you mean.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("confirm")]
+        public string Confirm { get; set; } = default!;
+
+        /// <summary>
+        /// How long the wipe waits for a device that is offline: 1 to 168 hours (default 24). Then it expires instead of running.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("expiresInHours")]
+        public int? ExpiresInHours { get; set; } = default!;
+
+        /// <summary>
+        /// Why, for your records (at most 500 characters).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("reason")]
+        public string? Reason { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class WipeDto
+    {
+
+        /// <summary>
+        /// The wipe's id: the id of the task that carries it (tsk_…).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("wipeId")]
+        public string WipeId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("deviceId")]
+        public string DeviceId { get; set; } = default!;
+
+        /// <summary>
+        /// pending (waiting for the device), wiping (the device acknowledged it and is erasing itself), done (the device enrolled again after it), cancelled, expired or failed.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public string Status { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("requestedAt")]
+        public System.DateTimeOffset RequestedAt { get; set; } = default!;
+
+        /// <summary>
+        /// Who asked: a person's email, or service:&lt;name&gt;.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("requestedBy")]
+        public string RequestedBy { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("reason")]
+        public string? Reason { get; set; } = default!;
+
+        /// <summary>
+        /// When a pending wipe stops waiting for the device.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("expiresAt")]
+        public System.DateTimeOffset ExpiresAt { get; set; } = default!;
+
+        /// <summary>
+        /// When the device acknowledged it, just before erasing itself.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("acknowledgedAt")]
+        public System.DateTimeOffset? AcknowledgedAt { get; set; } = default!;
+
+        /// <summary>
+        /// When it became done, cancelled, expired or failed.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("finishedAt")]
+        public System.DateTimeOffset? FinishedAt { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("cancelledBy")]
+        public string? CancelledBy { get; set; } = default!;
+
+        /// <summary>
+        /// More about how it ended, when there is more to say.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("detail")]
+        public string? Detail { get; set; } = default!;
 
     }
 

@@ -116,6 +116,8 @@ namespace OhrTech.Management
     [System.Text.Json.Serialization.JsonSerializable(typeof(WebAppVersionsDto))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(WebBundleDto))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(WebSigningKeyDto))]
+    [System.Text.Json.Serialization.JsonSerializable(typeof(WipeDeviceRequest))]
+    [System.Text.Json.Serialization.JsonSerializable(typeof(WipeDto))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(SettingMode))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<AdbSessionDto>))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<AppDto>))]
@@ -137,6 +139,7 @@ namespace OhrTech.Management
     [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<SettingDefinitionDto>))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<TaskDto>))]
     [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<WebBundleDto>))]
+    [System.Text.Json.Serialization.JsonSerializable(typeof(System.Collections.Generic.List<WipeDto>))]
     public partial class OhrManagementJsonContext : System.Text.Json.Serialization.JsonSerializerContext
     {
     }

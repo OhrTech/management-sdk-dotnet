@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.5.0 (2026-11-14)
+
+- Remote wipe: `WipeDeviceAsync` (a `WipeDeviceRequest` with `Confirm`, the device's id or IMEI; `ExpiresInHours`;
+  `Reason`), `ListWipesAsync` and `CancelWipeAsync`. Needs the `WipeDevices` permission, and OhrTech Agent 1065 or later
+  on the device. See [wipe a device](https://docs.ohrtech.net/management-api/guides/wipe/).
+
 ## 2.4.0 (2026-11-10)
 
 - Web apps: an existing website as an app on your devices. `CreateWebAppAsync` (from the site's manifest, or from
